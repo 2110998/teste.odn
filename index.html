@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hortifruti — Frutas, Verduras & Muito Mais</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #1A7A2E;
+    --green-dark: #0F4F1C;
+    --green-light: #2EAA47;
+    --yellow: #F5C800;
+    --yellow-light: #FFE566;
+    --orange: #FF7A00;
+    --white: #FFFFFF;
+    --cream: #FFFDF0;
+    --gray: #F4F4F2;
+    --text: #1A2E1A;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ===== WHATSAPP FLOAT ===== */
+  .whatsapp-float {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
+    background: #25D366; color: white;
+    width: 62px; height: 62px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.5);
+    animation: pulseWA 2s ease-in-out infinite;
+  }
+  .whatsapp-float svg { width: 34px; height: 34px; fill: white; }
+  @keyframes pulseWA {
+    0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.5); transform: scale(1); }
+    50% { box-shadow: 0 4px 40px rgba(37,211,102,0.8); transform: scale(1.08); }
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--green-dark);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.9rem 3rem;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .nav-logo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.4rem; color: var(--yellow);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo span { color: var(--white); font-size: 0.9rem; }
+  nav ul { list-style: none; display: flex; gap: 2rem; }
+  nav ul a {
+    color: rgba(255,255,255,0.85); text-decoration: none;
+    font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  nav ul a:hover { color: var(--yellow); }
+  .nav-btn {
+    background: var(--yellow); color: var(--green-dark) !important;
+    padding: 0.5rem 1.2rem; border-radius: 50px;
+    display: inline-flex; align-items: center; gap: 0.4rem;
+  }
+  .nav-btn svg { width: 16px; height: 16px; fill: var(--green-dark); }
+  .nav-btn:hover { background: var(--yellow-light) !important; color: var(--green-dark) !important; }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--green-dark) 0%, var(--green) 60%, #3DBF55 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center;
+    padding: 7rem 4rem 4rem;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 20% 50%, rgba(245,200,0,0.08) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+  }
+  .hero-circles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .circle { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.04); }
+  .c1 { width: 400px; height: 400px; top: -100px; right: -100px; }
+  .c2 { width: 250px; height: 250px; bottom: 50px; left: -50px; }
+  .c3 { width: 150px; height: 150px; top: 40%; right: 30%; }
+
+  .hero-content { position: relative; z-index: 2; max-width: 580px; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--yellow); color: var(--green-dark);
+    padding: 0.4rem 1rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 900; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 1.5rem;
+    animation: bounceIn 0.8s ease;
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    color: var(--white); line-height: 1.1;
+    margin-bottom: 1.2rem;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .hero h1 .highlight { color: var(--yellow); }
+  .hero p {
+    font-size: 1.1rem; color: rgba(255,255,255,0.88);
+    line-height: 1.7; margin-bottom: 2.5rem;
+    font-weight: 400; max-width: 460px;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-whatsapp {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    background: #25D366; color: white;
+    padding: 1rem 2rem; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 6px 25px rgba(37,211,102,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-whatsapp svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
+  .btn-whatsapp:hover { transform: translateY(-3px); box-shadow: 0 10px 35px rgba(37,211,102,0.5); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    border: 2px solid rgba(255,255,255,0.5); color: white;
+    padding: 1rem 2rem; border-radius: 50px;
+    font-size: 0.95rem; font-weight: 700;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+  .hero-emojis {
+    position: absolute; right: 5%; top: 50%;
+    transform: translateY(-50%);
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.2rem; z-index: 2;
+  }
+  .emoji-card {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 1.5rem 1.2rem;
+    text-align: center;
+    animation: floatCard 3s ease-in-out infinite;
+  }
+  .emoji-card:nth-child(2) { animation-delay: 0.5s; }
+  .emoji-card:nth-child(3) { animation-delay: 1s; }
+  .emoji-card:nth-child(4) { animation-delay: 1.5s; }
+  @keyframes floatCard {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .emoji-card .em { font-size: 2.5rem; display: block; margin-bottom: 0.4rem; }
+  .emoji-card span { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.9); }
+
+  /* ===== PROMO STRIP ===== */
+  .promo-strip { background: var(--yellow); padding: 0.9rem 0; overflow: hidden; }
+  .promo-track {
+    display: flex; gap: 3rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  .promo-item {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.85rem; font-weight: 900;
+    color: var(--green-dark); text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ===== SECTION BASE ===== */
+  section { padding: 5rem 4rem; }
+  .section-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(26,122,46,0.1); color: var(--green);
+    padding: 0.35rem 1rem; border-radius: 50px;
+    font-size: 0.75rem; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 1rem;
+  }
+  h2.section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    color: var(--green-dark); line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+  h2.section-title .yellow { color: var(--orange); }
+  .section-sub {
+    font-size: 1rem; color: #5A6A5A; line-height: 1.65;
+    max-width: 520px; margin-bottom: 3rem; font-weight: 400;
+  }
+
+  /* ===== PROMOÇÕES POR CATEGORIA ===== */
+  .promocoes-section {
+    background: var(--cream);
+    padding: 5rem 4rem;
+  }
+  .promo-section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+  .promo-section-header .section-tag {
+    display: inline-flex;
+  }
+
+  /* Categoria bloco */
+  .cat-promo-block {
+    margin-bottom: 4rem;
+  }
+  .cat-promo-block:last-child { margin-bottom: 0; }
+
+  .cat-promo-header {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 3px solid;
+  }
+  .cat-promo-header.verduras { border-color: #2EAA47; }
+  .cat-promo-header.frutas   { border-color: #FF7A00; }
+  .cat-promo-header.temperos { border-color: #8E44AD; }
+
+  .cat-promo-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; flex-shrink: 0;
+  }
+  .cat-promo-icon.verduras { background: linear-gradient(135deg,#2EAA47,#5DCF6A); }
+  .cat-promo-icon.frutas   { background: linear-gradient(135deg,#FF6B35,#FF9A3C); }
+  .cat-promo-icon.temperos { background: linear-gradient(135deg,#8E44AD,#AF7AC5); }
+
+  .cat-promo-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.6rem;
+  }
+  .cat-promo-title.verduras { color: #1A7A2E; }
+  .cat-promo-title.frutas   { color: #CC5500; }
+  .cat-promo-title.temperos { color: #6A2A9A; }
+
+  .cat-promo-subtitle { font-size: 0.85rem; color: #7A8A7A; font-weight: 600; margin-top: 0.1rem; }
+
+  /* Grid de cards de produto */
+  .produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .produto-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .produto-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 35px rgba(0,0,0,0.13);
+  }
+  .produto-card.verduras:hover { border-color: #2EAA47; }
+  .produto-card.frutas:hover   { border-color: #FF7A00; }
+  .produto-card.temperos:hover { border-color: #8E44AD; }
+
+  /* Badge oferta */
+  .badge-oferta {
+    position: absolute; top: 0.7rem; left: 0.7rem; z-index: 2;
+    background: var(--orange); color: white;
+    font-size: 0.62rem; font-weight: 900;
+    padding: 0.2rem 0.55rem; border-radius: 50px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .badge-oferta.verde { background: #1A7A2E; }
+  .badge-oferta.roxo  { background: #8E44AD; }
+
+  /* Imagem do produto */
+  .produto-img-wrap {
+    width: 100%; height: 160px;
+    overflow: hidden; background: #f0f8f0;
+    position: relative;
+  }
+  .produto-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .produto-card:hover .produto-img-wrap img { transform: scale(1.06); }
+
+  /* Fallback emoji quando imagem não carrega */
+  .produto-img-wrap .fallback-emoji {
+    display: none;
+    position: absolute; inset: 0;
+    align-items: center; justify-content: center;
+    font-size: 4rem;
+    background: #f5fbf5;
+  }
+  .produto-img-wrap img.error + .fallback-emoji { display: flex; }
+
+  /* Infos do produto */
+  .produto-info {
+    padding: 1rem 1.1rem 1.2rem;
+  }
+  .produto-nome {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.1rem; color: var(--green-dark);
+    margin-bottom: 0.2rem;
+  }
+  .produto-unidade { font-size: 0.72rem; color: #9AAA9A; margin-bottom: 0.7rem; }
+
+  .produto-precos { display: flex; align-items: flex-end; gap: 0.6rem; margin-bottom: 0.6rem; }
+  .preco-antigo {
+    font-size: 0.78rem; color: #BBBBBB;
+    text-decoration: line-through; line-height: 1;
+    padding-bottom: 2px;
+  }
+  .preco-novo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.7rem; line-height: 1;
+  }
+  .preco-novo.verduras { color: #1A7A2E; }
+  .preco-novo.frutas   { color: #CC5500; }
+  .preco-novo.temperos { color: #6A2A9A; }
+  .preco-novo small { font-size: 0.95rem; }
+
+  .economia-tag {
+    font-size: 0.67rem; font-weight: 800;
+    padding: 0.2rem 0.55rem; border-radius: 50px;
+    display: inline-block; margin-bottom: 0.9rem;
+  }
+  .economia-tag.verduras { background: #E8F5E9; color: #1A7A2E; }
+  .economia-tag.frutas   { background: #FFF3E0; color: #CC5500; }
+  .economia-tag.temperos { background: #F3E5F5; color: #6A2A9A; }
+
+  .produto-btn {
+    display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    width: 100%;
+    background: #25D366; color: white;
+    padding: 0.6rem 1rem; border-radius: 50px;
+    font-size: 0.78rem; font-weight: 800;
+    text-decoration: none; transition: background 0.2s, transform 0.15s;
+    border: none; cursor: pointer;
+  }
+  .produto-btn svg { width: 16px; height: 16px; fill: white; flex-shrink: 0; }
+  .produto-btn:hover { background: #1ebe59; transform: scale(1.02); }
+
+  /* ===== CATEGORIAS (vitrine) ===== */
+  .categorias { background: var(--green-dark); padding: 5rem 4rem; }
+  .categorias h2.section-title { color: white; }
+  .categorias .section-sub { color: rgba(255,255,255,0.7); }
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .cat-card {
+    border-radius: 20px; padding: 2rem 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .cat-card:hover { transform: translateY(-6px); border-color: var(--yellow); }
+  .cat-frutas   { background: linear-gradient(135deg,#FF6B35,#FF9A3C); }
+  .cat-verduras { background: linear-gradient(135deg,#2EAA47,#5DCF6A); }
+  .cat-legumes  { background: linear-gradient(135deg,#C0392B,#E74C3C); }
+  .cat-temperos { background: linear-gradient(135deg,#8E44AD,#AF7AC5); }
+  .cat-cereais  { background: linear-gradient(135deg,#D4A017,#F0C040); }
+  .cat-acai     { background: linear-gradient(135deg,#4A1A6B,#7D3C98); }
+  .cat-emoji { font-size: 3rem; display: block; margin-bottom: 1rem; }
+  .cat-name { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: white; margin-bottom: 0.4rem; }
+  .cat-desc { font-size: 0.82rem; color: rgba(255,255,255,0.85); line-height: 1.5; }
+  .cat-items { margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem; }
+  .cat-tag { background: rgba(255,255,255,0.2); color: white; font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 50px; }
+
+  /* ===== SOBRE ===== */
+  .sobre {
+    background: white;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+    padding: 5rem 4rem;
+  }
+  .sobre-main-card {
+    background: var(--green-dark);
+    border-radius: 24px; padding: 3rem 2.5rem;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .sobre-main-card::before {
+    content: ''; position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: rgba(245,200,0,0.1); border-radius: 50%;
+  }
+  .sobre-big-emoji { font-size: 6rem; display: block; margin-bottom: 1rem; }
+  .sobre-main-card h3 { font-family: 'Fredoka One', cursive; font-size: 1.8rem; color: var(--yellow); margin-bottom: 0.5rem; }
+  .sobre-main-card p { color: rgba(255,255,255,0.75); font-size: 0.9rem; line-height: 1.6; }
+  .sobre-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  .sstat { background: rgba(255,255,255,0.07); border-radius: 14px; padding: 1rem; text-align: center; }
+  .sstat-num { font-family: 'Fredoka One', cursive; font-size: 1.8rem; color: var(--yellow); display: block; }
+  .sstat-label { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+  .sobre-text p { color: #5A6A5A; line-height: 1.75; margin-bottom: 1rem; font-size: 0.97rem; }
+  .sobre-features { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .sf { display: flex; align-items: flex-start; gap: 1rem; background: var(--gray); border-radius: 14px; padding: 1rem 1.2rem; }
+  .sf-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .sf-title { font-weight: 800; color: var(--green-dark); font-size: 0.9rem; }
+  .sf-desc { font-size: 0.82rem; color: #7A8A7A; margin-top: 0.2rem; }
+
+  /* ===== DEPOIMENTOS ===== */
+  .depoimentos { background: var(--cream); }
+  .dep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .dep-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--green); transition: transform 0.3s; }
+  .dep-card:hover { transform: translateY(-4px); }
+  .dep-stars { color: var(--yellow); font-size: 1.1rem; margin-bottom: 1rem; }
+  .dep-text { font-size: 0.93rem; color: #4A5A4A; line-height: 1.7; font-style: italic; margin-bottom: 1.5rem; }
+  .dep-author { display: flex; align-items: center; gap: 0.8rem; }
+  .dep-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg,var(--green),var(--yellow)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .dep-name { font-weight: 800; color: var(--green-dark); font-size: 0.9rem; }
+  .dep-local { font-size: 0.75rem; color: #9AAA9A; }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green) 100%);
+    padding: 6rem 4rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-final::before { content: '🌿'; position: absolute; font-size: 20rem; opacity: 0.04; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .cta-final h2 { font-family: 'Fredoka One', cursive; font-size: clamp(2rem,4.5vw,3.8rem); color: white; margin-bottom: 1rem; position: relative; }
+  .cta-final h2 span { color: var(--yellow); }
+  .cta-final p { color: rgba(255,255,255,0.8); font-size: 1.05rem; max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.65; }
+  .cta-cards { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 3rem; }
+  .cta-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: 16px; padding: 1.2rem 1.8rem; text-align: center; min-width: 160px; }
+  .cta-card-icon { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+  .cta-card-text { font-size: 0.85rem; color: rgba(255,255,255,0.9); font-weight: 700; }
+  .btn-cta-big {
+    display: inline-flex; align-items: center; gap: 0.8rem;
+    background: #25D366; color: white;
+    padding: 1.2rem 2.8rem; border-radius: 50px;
+    font-size: 1.1rem; font-weight: 900;
+    text-decoration: none;
+    box-shadow: 0 8px 30px rgba(37,211,102,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .btn-cta-big svg { width: 26px; height: 26px; fill: white; }
+  .btn-cta-big:hover { transform: translateY(-4px); box-shadow: 0 14px 40px rgba(37,211,102,0.5); }
+  .btn-cta-big .pulse-dot { width: 10px; height: 10px; background: white; border-radius: 50%; animation: pulseDot 1.5s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.5;transform:scale(1.5);} }
+
+  /* ===== FOOTER ===== */
+  footer { background: var(--green-dark); padding: 2.5rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+  .footer-logo { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: var(--yellow); }
+  .footer-logo span { color: white; font-size: 0.85rem; display: block; font-family: 'Nunito',sans-serif; font-weight: 400; }
+  footer p { font-size: 0.78rem; color: rgba(255,255,255,0.4); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 0.8rem; font-weight: 700; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--yellow); }
+
+  /* ===== REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    nav { padding: 0.8rem 1.5rem; }
+   
+nav ul { display: flex; gap: 2rem; }
+
+/* ===== MENU MOBILE ===== */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 0.3rem;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  display: block;
+  width: 26px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+.hamburger.ativo span:nth-child(1) { transform: rotate(45deg) translate(5px, 6px); }
+.hamburger.ativo span:nth-child(2) { opacity: 0; }
+.hamburger.ativo span:nth-child(3) { transform: rotate(-45deg) translate(5px, -6px); }
+
+@media (max-width: 900px) {
+  .hamburger { display: flex; }
+  nav ul {
+    display: none;
+    position: fixed;
+    top: 60px; left: 0; right: 0;
+    background: var(--green-dark);
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 1rem 0;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+  nav ul.aberto { display: flex; }
+  nav ul li { width: 100%; text-align: center; }
+  nav ul a {
+    display: block;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  nav ul a:hover { background: rgba(255,255,255,0.05); }
+}
+
+    section, .sobre, .categorias, .depoimentos, .cta-final, .promocoes-section { padding: 3.5rem 1.5rem; }
+    .hero { padding: 6rem 1.5rem 3rem; flex-direction: column; }
+    .hero-emojis { position: static; transform: none; margin-top: 2rem; grid-template-columns: repeat(4,1fr); }
+    .sobre { grid-template-columns: 1fr; gap: 2.5rem; }
+    .produtos-grid { grid-template-columns: repeat(2,1fr); }
+    footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+  }
+  @media (max-width: 480px) {
+    .produtos-grid { grid-template-columns: 1fr 1fr; gap: 0.9rem; }
+    .produto-img-wrap { height: 130px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG WhatsApp icon (reutilizável via <use>) -->
+<svg style="display:none">
+  <symbol id="wa-icon" viewBox="0 0 32 32">
+    <path d="M16 0C7.163 0 0 7.163 0 16c0 2.82.733 5.464 2.014 7.761L0 32l8.469-2.219A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.267 13.267 0 01-6.765-1.849l-.485-.29-5.027 1.318 1.34-4.896-.317-.503A13.223 13.223 0 012.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333zM23.3 19.4c-.4-.2-2.36-1.16-2.727-1.294-.367-.133-.633-.2-.9.2s-1.033 1.294-1.267 1.56-.467.3-.867.1c-.4-.2-1.687-.622-3.213-1.983-1.187-1.06-1.989-2.369-2.222-2.769-.233-.4-.025-.616.175-.816.18-.18.4-.467.6-.7.2-.233.267-.4.4-.667.133-.267.067-.5-.033-.7s-.9-2.167-1.233-2.967c-.325-.78-.655-.674-.9-.686l-.767-.013c-.267 0-.7.1-1.067.5S8 10.6 8 12.6s1.4 3.8 1.6 4.067c.2.267 2.753 4.2 6.673 5.893 3.92 1.693 3.92 1.129 4.627 1.059.707-.067 2.28-.933 2.6-1.833.32-.9.32-1.667.227-1.833-.093-.133-.36-.2-.76-.4z"/>
+  </symbol>
+</svg>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5511941474285?text=Olá!%20Vi%20a%20página%20de%20vocês%20e%20quero%20saber%20mais%20sobre%20os%20produtos!" class="whatsapp-float" target="_blank" title="Fale conosco no WhatsApp">
+  <svg><use href="#wa-icon"/></svg>
+</a>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hortifruti<span>Hortifruti</span></div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+  <ul id="nav-menu">
+    <li><a href="#promocoes">Promoções</a></li>
+    <li><a href="#produtos">Produtos</a></li>
+    <li><a href="#sobre">A Loja</a></li>
+    <li><a href="#depoimentos">Avaliações</a></li>
+    <li>
+      <a href="https://wa.me/5511941474285" target="_blank" class="nav-btn">
+        <svg><use href="#wa-icon"/></svg> WhatsApp
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-circles">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="circle c3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">🔥 Promoções de Junho — Válidas por tempo limitado!</div>
+    <h1>O melhor do campo<br><span class="highlight">chegou perto</span><br>de você!</h1>
+    <p>Frutas frescas, verduras selecionadas, temperos do Norte e muito mais. Qualidade de feira com a praticidade de ter tudo num só lugar.</p>
+    <div class="hero-btns">
+      <a href="https://wa.me/5511941474285?text=Olá!%20Quero%20ver%20os%20produtos%20em%20promoção!" class="btn-whatsapp" target="_blank">
+        <svg><use href="#wa-icon"/></svg> Pedir pelo WhatsApp
+      </a>
+      <a href="#promocoes" class="btn-outline">Ver promoções ↓</a>
+    </div>
+  </div>
+  <div class="hero-emojis">
+    <div class="emoji-card"><span class="em">🥬</span><span>Verduras</span></div>
+    <div class="emoji-card"><span class="em">🍎</span><span>Frutas</span></div>
+    <div class="emoji-card"><span class="em">🌿</span><span>Temperos</span></div>
+    <div class="emoji-card"><span class="em">🥕</span><span>Legumes</span></div>
+  </div>
+</section>
+
+<!-- PROMO STRIP -->
+<div class="promo-strip">
+  <div class="promo-track">
+    <span class="promo-item">🔥 Frete grátis acima de R$80</span>
+    <span class="promo-item">🌿 Produtos frescos todo dia</span>
+    <span class="promo-item">⚡ Entrega rápida no bairro</span>
+    <span class="promo-item">✅ Qualidade garantida</span>
+    <span class="promo-item">🍎 Direto do produtor</span>
+    <span class="promo-item">💬 Peça pelo WhatsApp</span>
+    <span class="promo-item">🔥 Frete grátis acima de R$80</span>
+    <span class="promo-item">🌿 Produtos frescos todo dia</span>
+    <span class="promo-item">⚡ Entrega rápida no bairro</span>
+    <span class="promo-item">✅ Qualidade garantida</span>
+    <span class="promo-item">🍎 Direto do produtor</span>
+    <span class="promo-item">💬 Peça pelo WhatsApp</span>
+  </div>
+</div>
+
+<!-- =============================================
+     PROMOÇÕES POR CATEGORIA
+     Para mudar os produtos: edite os arrays
+     dentro de cada objeto em PROMO_DATA abaixo.
+     Campos: nome, unidade, precoAntigo, precoNovo,
+             economia, badge, img (URL), emoji (fallback)
+============================================== -->
+<section class="promocoes-section" id="promocoes">
+
+<!-- CONTADOR REGRESSIVO -->
+<div style="background:linear-gradient(135deg,#0F4F1C,#1A7A2E);padding:1.2rem 2rem;text-align:center;border-radius:16px;margin-bottom:2.5rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;">
+  <div style="color:rgba(255,255,255,0.9);font-weight:800;font-size:0.95rem;">⏳ Promoções acabam em:</div>
+  <div style="display:flex;gap:0.8rem;align-items:center;">
+    <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:0.5rem 0.9rem;text-align:center;">
+      <span id="contador-horas" style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#F5C800;display:block;">00</span>
+      <span style="font-size:0.6rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.1em;">horas</span>
+    </div>
+    <span style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#F5C800;">:</span>
+    <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:0.5rem 0.9rem;text-align:center;">
+      <span id="contador-minutos" style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#F5C800;display:block;">00</span>
+      <span style="font-size:0.6rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.1em;">min</span>
+    </div>
+    <span style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#F5C800;">:</span>
+    <div style="background:rgba(255,255,255,0.15);border-radius:10px;padding:0.5rem 0.9rem;text-align:center;">
+      <span id="contador-segundos" style="font-family:'Fredoka One',cursive;font-size:1.8rem;color:#F5C800;display:block;">00</span>
+      <span style="font-size:0.6rem;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:0.1em;">seg</span>
+    </div>
+  </div>
+  <div style="background:#FF7A00;color:white;font-size:0.72rem;font-weight:900;padding:0.3rem 0.8rem;border-radius:50px;text-transform:uppercase;letter-spacing:0.08em;">🔥 Corra!</div>
+</div>
+
+  <div class="promo-section-header reveal">
+    <div class="section-tag">🏷️ Ofertas da Semana</div>
+    <h2 class="section-title">Promoções <span class="yellow">especiais</span> por categoria</h2>
+    <p class="section-sub" style="text-align:center;max-width:100%;">Produtos fresquinhos com os melhores preços. Aproveite enquanto durar o estoque!</p>
+  </div>
+
+  <!-- Os cards são gerados pelo JS abaixo -->
+  <div id="promo-container"></div>
+</section>
+
+
+<section class="categorias" id="produtos">
+  <div class="reveal" style="text-align:center;padding:2rem 1rem">
+    <div class="section-tag" style="background:rgba(245,200,0,0.15);color:var(--yellow);display:inline-flex;margin-bottom:1rem">🛒 Catálogo completo</div>
+    <h2 class="section-title" style="color:white;margin-bottom:1rem">Conheça todos os nossos <span style="color:var(--yellow)">produtos</span></h2>
+    <p style="color:rgba(255,255,255,0.75);margin:0 auto 2.5rem;max-width:460px;font-size:1rem;line-height:1.7">Frutas, verduras, temperos, grãos e muito mais. Veja tudo disponível e faça seu pedido direto pelo WhatsApp!</p>
+    <a href="catalogo.html" style="display:inline-flex;align-items:center;gap:0.8rem;background:var(--yellow);color:var(--green-dark);padding:1.1rem 2.5rem;border-radius:50px;font-size:1.1rem;font-weight:900;text-decoration:none;box-shadow:0 8px 30px rgba(245,200,0,0.4);font-family:'Nunito',sans-serif">
+      🛒 Ver catálogo e fazer pedido →
+    </a>
+  </div>
+</section>
+
+
+
+<!-- SOBRE -->
+<section class="sobre" id="sobre">
+  <div class="sobre-visual reveal">
+    <div class="sobre-main-card">
+      <span class="sobre-big-emoji">🌿</span>
+      <h3>Hortifruti</h3>
+      <p>Há mais de 10 anos levando frescor e qualidade pras mesas da nossa comunidade.</p>
+      <div class="sobre-stats">
+        <div class="sstat"><span class="sstat-num">10+</span><span class="sstat-label">Anos no bairro</span></div>
+        <div class="sstat"><span class="sstat-num">500+</span><span class="sstat-label">Clientes felizes</span></div>
+        <div class="sstat"><span class="sstat-num">100%</span><span class="sstat-label">Produtos frescos</span></div>
+        <div class="sstat"><span class="sstat-num">48h</span><span class="sstat-label">Entrega máxima</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="sobre-text reveal">
+    <div class="section-tag">🏪 Nossa história</div>
+    <h2 class="section-title">Tradição e<br>frescor <span class="yellow">de verdade</span></h2>
+    <p>Começamos como uma banca de feira e crescemos mantendo o mesmo compromisso: trazer o que há de melhor do campo diretamente pra você, sem perder a qualidade e sem complicar o seu bolso.</p>
+    <p>Trabalhamos com produtores locais e regionais, garantindo que cada produto chegue fresquinho, saboroso e com o preço justo que você merece.</p>
+    <div class="sobre-features">
+      <div class="sf">
+        <div class="sf-icon">🚚</div>
+        <div><div class="sf-title">Entrega no bairro</div><div class="sf-desc">Levamos até a sua porta, de segunda a sábado.</div></div>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">✅</div>
+        <div><div class="sf-title">Qualidade garantida</div><div class="sf-desc">Produto ruim? A gente troca sem discussão.</div></div>
+      </div>
+      <div class="sf">
+        <div class="sf-icon">💬</div>
+        <div><div class="sf-title">Atendimento no WhatsApp</div><div class="sf-desc">Peça, tire dúvidas e acompanhe seu pedido.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section class="depoimentos" id="depoimentos">
+  <div class="section-tag">⭐ Avaliações</div>
+  <h2 class="section-title">O que nossos <span class="yellow">clientes</span> falam</h2>
+  <p class="section-sub">Mais de 500 famílias confiam na gente todo mês. Veja o que elas dizem!</p>
+  <div class="dep-grid">
+    <div class="dep-card reveal">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"Melhor hortifruti do bairro! As verduras chegam sempre fresquinhas e o atendimento pelo WhatsApp é super rápido. Não troco por nada!"</p>
+      <div class="dep-author"><div class="dep-avatar">👩</div><div><div class="dep-name">Ana Clara</div><div class="dep-local">Vila Madalena</div></div></div>
+    </div>
+    <div class="dep-card reveal">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"As frutas são sempre docinhas e no ponto certo. Compro toda semana e nunca me decepcionei. O preço também é justo demais!"</p>
+      <div class="dep-author"><div class="dep-avatar">👨</div><div><div class="dep-name">Carlos Eduardo</div><div class="dep-local">Pinheiros</div></div></div>
+    </div>
+    <div class="dep-card reveal">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"Descobri essa loja pela indicação de uma amiga e não me arrependo. Os temperos são uma delícia e a entrega é sempre pontual. Super recomendo!"</p>
+      <div class="dep-author"><div class="dep-avatar">👩</div><div><div class="dep-name">Juliana Matos</div><div class="dep-local">Perdizes</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>Pronto pra pedir <span>agora?</span></h2>
+  <p>Chama no WhatsApp e garanta seus produtos fresquinhos com entrega rápida no bairro!</p>
+  <div class="cta-cards">
+    <div class="cta-card"><span class="cta-card-icon">🚚</span><div class="cta-card-text">Entrega rápida</div></div>
+    <div class="cta-card"><span class="cta-card-icon">💰</span><div class="cta-card-text">Preço justo</div></div>
+    <div class="cta-card"><span class="cta-card-icon">🌿</span><div class="cta-card-text">Sempre fresco</div></div>
+    <div class="cta-card"><span class="cta-card-icon">✅</span><div class="cta-card-text">Qualidade garantida</div></div>
+  </div>
+  <a href="https://wa.me/5511941474285?text=Olá!%20Quero%20fazer%20um%20pedido!" class="btn-cta-big" target="_blank">
+    <svg><use href="#wa-icon"/></svg>
+    Chamar no WhatsApp
+    <span class="pulse-dot"></span>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Hortifruti<span>Hortifruti — Qualidade que você vê e sente</span></div>
+  <p>© 2025 Hortifruti. Todos os direitos reservados.</p>
+  <div class="footer-links">
+    <a href="#promocoes">Promoções</a>
+    <a href="#sobre">Sobre</a>
+    <a href="https://wa.me/5511941474285" target="_blank">WhatsApp</a>
+  </div>
+</footer>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore-compat.js"></script>
+
+<script>
+/* ==============================================
+   DADOS DE PROMOÇÕES — EDITE AQUI FACILMENTE!
+   
+   Para trocar produtos, basta alterar:
+   - nome, unidade, precoAntigo, precoNovo
+   - economia (texto livre, ex: "Economize R$2")
+   - badge (texto do badge, ex: "Queima!" ou "")
+   - img: URL da imagem (use Unsplash, Pexels, etc.)
+   - emoji: fallback caso a imagem não carregue
+=============================================== */
+const PROMO_DATA = {
+  verduras: [],
+  frutas: [],
+  temperos: []
+};
+/* ==============================================
+   ✏️ CONFIGURAÇÕES DA LOJA — EDITE AQUI
+   Só mexa nesse bloco pra adaptar pra cada cliente
+=============================================== */
+const LOJA = {
+  nome: "Hortifruti",
+  slogan: "O melhor do campo chegou perto de você!",
+  descricao: "Frutas frescas, verduras selecionadas, temperos do Norte e muito mais.",
+  whatsapp: "5511941474285",
+  cores: {
+    principal: "#1A7A2E",
+    principalDark: "#0F4F1C",
+    principalLight: "#2EAA47",
+    destaque: "#F5C800",
+    destaqueLight: "#FFE566",
+    laranja: "#FF7A00",
+  },
+  badge: "🔥 Promoções de Junho — Válidas por tempo limitado!",
+  depoimentos: [
+    {
+      texto: "Melhor hortifruti do bairro! As verduras chegam sempre fresquinhas.",
+      nome: "Ana Clara",
+      local: "Vila Madalena",
+      avatar: "👩"
+    },
+    {
+      texto: "As frutas são sempre docinhas e no ponto certo. Compro toda semana!",
+      nome: "Carlos Eduardo",
+      local: "Pinheiros",
+      avatar: "👨"
+    },
+    {
+      texto: "Os temperos são uma delícia e a entrega é sempre pontual!",
+      nome: "Juliana Matos",
+      local: "Perdizes",
+      avatar: "👩"
+    }
+  ],
+
+  
+  produtos: []
+};
+
+/* ===== CONTADOR REGRESSIVO ===== */
+function iniciarContador() {
+  const elHoras = document.getElementById('contador-horas');
+  const elMinutos = document.getElementById('contador-minutos');
+  const elSegundos = document.getElementById('contador-segundos');
+
+  async function carregarEIniciar() {
+    try {
+      const doc = await db.collection('config').doc('promocao').get();
+      if (!doc.exists) return;
+
+      const { inicio, fim } = doc.data();
+      const agora = new Date();
+      const dataFim = new Date(fim);
+      const dataInicio = new Date(inicio);
+
+      // Se promoção ainda não começou ou já acabou
+      if (agora < dataInicio || agora > dataFim) {
+        // Limpa produtos automaticamente se passou do fim
+        if (agora > dataFim) {
+          await db.collection('promocoes').doc('produtos').set({ verduras:[], frutas:[], temperos:[] });
+        }
+        elHoras.textContent = '00';
+        elMinutos.textContent = '00';
+        elSegundos.textContent = '00';
+        return;
+      }
+
+      function atualizar() {
+        const agora = new Date();
+        const diff = Math.max(0, dataFim - agora);
+
+        if (diff <= 0) {
+          elHoras.textContent = '00';
+          elMinutos.textContent = '00';
+          elSegundos.textContent = '00';
+          // Limpa produtos ao zerar
+          db.collection('promocoes').doc('produtos').set({ verduras:[], frutas:[], temperos:[] });
+          clearInterval(intervalo);
+          return;
+        }
+
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+
+        elHoras.textContent   = String(h).padStart(2,'0');
+        elMinutos.textContent = String(m).padStart(2,'0');
+        elSegundos.textContent = String(s).padStart(2,'0');
+      }
+
+      atualizar();
+      const intervalo = setInterval(atualizar, 1000);
+
+    } catch(e) {
+      console.log('Erro no contador:', e);
+    }
+  }
+
+  carregarEIniciar();
+}
+
+
+/* ===== APLICA AS CORES DINAMICAMENTE ===== */
+document.documentElement.style.setProperty('--green', LOJA.cores.principal);
+document.documentElement.style.setProperty('--green-dark', LOJA.cores.principalDark);
+document.documentElement.style.setProperty('--green-light', LOJA.cores.principalLight);
+document.documentElement.style.setProperty('--yellow', LOJA.cores.destaque);
+document.documentElement.style.setProperty('--yellow-light', LOJA.cores.destaqueLight);
+document.documentElement.style.setProperty('--orange', LOJA.cores.laranja);
+
+/* ===== APLICA NOME E TEXTOS ===== */
+document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = `🌿 ${LOJA.nome} <span>Hortifruti</span>`);
+document.querySelector('.hero-badge').textContent = LOJA.badge;
+document.querySelector('.hero p').textContent = LOJA.descricao;
+document.querySelector('.footer-logo').innerHTML = `🌿 ${LOJA.nome}<span>Hortifruti — Qualidade que você vê e sente</span>`;
+
+/* ===== APLICA WHATSAPP ===== */
+document.querySelectorAll('a[href*="wa.me"]').forEach(el => {
+  el.href = el.href.replace(/wa\.me\/\d+/, `wa.me/${LOJA.whatsapp}`);
+});
+
+/* ===== RENDERIZA DEPOIMENTOS ===== */
+const depGrid = document.querySelector('.dep-grid');
+if (depGrid) {
+  depGrid.innerHTML = LOJA.depoimentos.map(d => `
+    <div class="dep-card reveal">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"${d.texto}"</p>
+      <div class="dep-author">
+        <div class="dep-avatar">${d.avatar}</div>
+        <div>
+          <div class="dep-name">${d.nome}</div>
+          <div class="dep-local">${d.local}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ===== SCROLL REVEAL (declarado aqui para uso em renderizarProdutos) ===== */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ===== FIREBASE — RENDERIZA PRODUTOS EM TEMPO REAL ===== */
+const firebaseConfig = {
+    apiKey: "AIzaSyC5ZFLt5z73v8pco0X7nzpb9N2Xlsmfrzo",
+    authDomain: "hortifruti-system.firebaseapp.com",
+    projectId: "hortifruti-system",
+    storageBucket: "hortifruti-system.firebasestorage.app",
+    messagingSenderId: "634521386120",
+    appId: "1:634521386120:web:9f93d751a45a9f8fa3b33d",
+    measurementId: "G-YF5KJH1BPD"
+  };
+
+// Metadados das categorias (ícone, descrição, classe CSS)
+const CAT_META = {
+  verduras: { icone: "🥬", descricao: "Colhidas fresquinhas, cheias de nutrientes", classe: "verduras", categoria: "Verduras" },
+  frutas:   { icone: "🍎", descricao: "Docinhas, no ponto certo, direto do produtor", classe: "frutas",   categoria: "Frutas"   },
+  temperos: { icone: "🌿", descricao: "Ervas e especiarias que transformam o prato",  classe: "temperos", categoria: "Temperos" }
+};
+
+function renderizarProdutos(dados) {
+  const container = document.getElementById("promo-container");
+  container.innerHTML = '';
+
+  ['verduras', 'frutas', 'temperos'].forEach(chave => {
+    const meta = CAT_META[chave];
+    const produtos = dados[chave] || [];
+    if (!produtos.length) return;
+
+    const cards = produtos.map(p => {
+      const waMsg = encodeURIComponent(`Olá! Quero aproveitar a promoção de ${p.nome} por ${p.precoNovo}. Ainda tem disponível?`);
+      const badgeHTML = p.badge ? `<div class="badge-oferta ${meta.classe === 'verduras' ? 'verde' : meta.classe === 'temperos' ? 'roxo' : ''}">${p.badge}</div>` : '';
+      return `
+        <div class="produto-card ${meta.classe}">
+          ${badgeHTML}
+          <div class="produto-img-wrap">
+            <img src="${p.img}" alt="${p.nome}" loading="lazy" onerror="this.classList.add('error')"/>
+            <div class="fallback-emoji">${p.emoji || '🛒'}</div>
+          </div>
+          <div class="produto-info">
+            <div class="produto-nome">${p.nome}</div>
+            <div class="produto-unidade">${p.unidade}</div>
+            <div class="produto-precos">
+              <span class="preco-antigo">${p.precoAntigo}</span>
+              <span class="preco-novo ${meta.classe}"><small>R$</small>${p.precoNovo.replace('R$','')}</span>
+            </div>
+            <span class="economia-tag ${meta.classe}">✅ ${p.economia}</span>
+            <a href="https://wa.me/${LOJA.whatsapp}?text=${waMsg}" target="_blank" class="produto-btn">
+              <svg><use href="#wa-icon"/></svg> Quero esse!
+            </a>
+          </div>
+        </div>`;
+    }).join('');
+
+    const block = document.createElement("div");
+    block.className = "cat-promo-block reveal visible";
+    block.innerHTML = `
+      <div class="cat-promo-header ${meta.classe}">
+        <div class="cat-promo-icon ${meta.classe}">${meta.icone}</div>
+        <div>
+          <div class="cat-promo-title ${meta.classe}">${meta.categoria} em Promoção</div>
+          <div class="cat-promo-subtitle">${meta.descricao}</div>
+        </div>
+      </div>
+      <div class="produtos-grid">${cards}</div>`;
+    container.appendChild(block);
+  });
+}
+
+// Inicializa Firebase e escuta mudanças em tempo real
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+iniciarContador();
+
+// Fallback: renderiza com dados locais enquanto carrega
+renderizarProdutos({ verduras: [], frutas: [], temperos: [] });
+
+// Escuta o Firestore — atualiza automaticamente quando o admin salvar
+db.collection('promocoes').doc('produtos').onSnapshot(doc => {
+  if (doc.exists) {
+    const raw = doc.data();
+    // Normaliza: o Firestore salva arrays diretos (verduras: [...])
+    // mas garante compatibilidade se vier com .items
+    const dados = {
+      verduras: Array.isArray(raw.verduras) ? raw.verduras : (raw.verduras?.items || []),
+      frutas:   Array.isArray(raw.frutas)   ? raw.frutas   : (raw.frutas?.items   || []),
+      temperos: Array.isArray(raw.temperos) ? raw.temperos : (raw.temperos?.items  || [])
+    };
+    console.log('✅ Firebase carregou:', dados.verduras.length, 'verduras,', dados.frutas.length, 'frutas,', dados.temperos.length, 'temperos');
+    renderizarProdutos(dados);
+  }
+}, err => {
+  console.warn('Firebase indisponível, usando dados locais.', err);
+});
+
+
+/* ===== MENU MOBILE ===== */
+const hamburger = document.getElementById('hamburger');
+const navMenu = document.getElementById('nav-menu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('ativo');
+  navMenu.classList.toggle('aberto');
+});
+
+navMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('ativo');
+    navMenu.classList.remove('aberto');
+  });
+});
+
+
+
+
+
+
+
+</script>
+
+</body>
+
+</html>

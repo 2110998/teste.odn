@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo — Hortifruti</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#1A7A2E;--green-dark:#0F4F1C;--green-light:#2EAA47;
+  --yellow:#F5C800;--orange:#FF7A00;--red:#E53935;
+  --white:#FFFFFF;--cream:#FFFDF0;--gray:#F4F6F4;--text:#1A2E1A;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;background:var(--gray);color:var(--text);overflow-x:hidden}
+
+/* ===== HEADER ===== */
+.header{
+  background:var(--green-dark);
+  padding:0.9rem 1.2rem;
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:0.8rem;
+  box-shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+.header-back{
+  background:rgba(255,255,255,0.1);border:none;color:white;
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;cursor:pointer;flex-shrink:0;
+  text-decoration:none;transition:background 0.2s;
+}
+.header-back:hover{background:rgba(255,255,255,0.2)}
+.header-logo{
+  font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--yellow);flex:1;
+}
+.header-logo span{color:white;font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:400;display:block}
+.cart-btn{
+  position:relative;background:var(--yellow);border:none;
+  width:42px;height:42px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;cursor:pointer;flex-shrink:0;
+  transition:transform 0.2s;
+}
+.cart-btn:hover{transform:scale(1.1)}
+.cart-count{
+  position:absolute;top:-4px;right:-4px;
+  background:var(--red);color:white;
+  font-size:0.6rem;font-weight:900;
+  width:18px;height:18px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  display:none;
+}
+.cart-count.show{display:flex}
+
+/* ===== SEARCH ===== */
+.search-wrap{
+  background:var(--green-dark);
+  padding:0 1.2rem 1rem;
+}
+.search-box{
+  display:flex;align-items:center;gap:0.6rem;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:50px;padding:0.6rem 1rem;
+}
+.search-box input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:white;font-family:'Nunito',sans-serif;font-size:0.9rem;
+}
+.search-box input::placeholder{color:rgba(255,255,255,0.5)}
+.search-icon{color:rgba(255,255,255,0.5);font-size:1rem}
+
+/* ===== CATEGORIAS ===== */
+.cats-wrap{
+  background:var(--green-dark);
+  padding:0 1.2rem 1rem;
+  display:flex;gap:0.5rem;overflow-x:auto;
+}
+.cats-wrap::-webkit-scrollbar{display:none}
+.cat-chip{
+  flex-shrink:0;padding:0.4rem 1rem;
+  border-radius:50px;font-size:0.78rem;font-weight:800;
+  border:2px solid rgba(255,255,255,0.2);
+  background:transparent;color:rgba(255,255,255,0.7);
+  cursor:pointer;font-family:'Nunito',sans-serif;
+  transition:all 0.2s;white-space:nowrap;
+}
+.cat-chip.ativo{background:var(--yellow);color:var(--green-dark);border-color:var(--yellow)}
+.cat-chip:hover{border-color:var(--yellow);color:var(--yellow)}
+
+/* ===== PRODUTOS ===== */
+.content{padding:1rem 1rem 6rem}
+.section-title{
+  font-family:'Fredoka One',cursive;font-size:1.1rem;
+  color:var(--green-dark);margin-bottom:0.8rem;
+  display:flex;align-items:center;gap:0.5rem;
+}
+.produtos-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem;
+  margin-bottom:1.5rem;
+}
+.produto-card{
+  background:white;border-radius:16px;overflow:hidden;
+  box-shadow:0 2px 10px rgba(0,0,0,0.07);
+  transition:transform 0.2s,box-shadow 0.2s;
+  position:relative;
+}
+.produto-card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(0,0,0,0.12)}
+.produto-card.indisponivel{opacity:0.6}
+.produto-img-wrap{
+  height:90px;overflow:hidden;position:relative;
+  background:linear-gradient(135deg,#E8F5E9,#C8E6C9);
+  display:flex;align-items:center;justify-content:center;
+}
+.produto-img-wrap img{width:100%;height:100%;object-fit:cover}
+.produto-emoji-fallback{font-size:3rem}
+.produto-badge{
+  position:absolute;top:0.5rem;left:0.5rem;
+  background:var(--orange);color:white;
+  font-size:0.6rem;font-weight:900;
+  padding:0.2rem 0.5rem;border-radius:50px;
+  text-transform:uppercase;letter-spacing:0.05em;
+}
+.status-badge{
+  position:absolute;top:0.5rem;right:0.5rem;
+  font-size:0.6rem;font-weight:900;
+  padding:0.2rem 0.5rem;border-radius:50px;
+}
+.status-badge.disponivel{background:rgba(26,122,46,0.15);color:var(--green)}
+.status-badge.indisponivel{background:rgba(229,57,53,0.15);color:var(--red)}
+.produto-body{padding:0.7rem}
+.produto-nome{
+  font-family:'Fredoka One',cursive;font-size:0.95rem;
+  color:var(--text);margin-bottom:0.2rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.produto-unidade{font-size:0.7rem;color:#7A8A7A;margin-bottom:0.4rem}
+.produto-preco-wrap{display:flex;align-items:baseline;gap:0.4rem;margin-bottom:0.6rem}
+.produto-preco-old{font-size:0.72rem;color:#BBBBBB;text-decoration:line-through}
+.produto-preco-new{
+  font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--green);
+}
+.produto-economia{
+  font-size:0.62rem;font-weight:800;
+  background:rgba(26,122,46,0.1);color:var(--green);
+  padding:0.15rem 0.4rem;border-radius:50px;
+}
+
+/* Controle de quantidade */
+.qty-wrap{
+  display:flex;align-items:center;gap:0.4rem;
+}
+.qty-btn{
+  width:28px;height:28px;border-radius:50%;border:none;
+  font-size:1rem;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all 0.2s;font-family:'Nunito',sans-serif;
+}
+.qty-btn.minus{background:#F0F0F0;color:#666}
+.qty-btn.minus:hover{background:#E0E0E0}
+.qty-btn.plus{background:var(--green);color:white}
+.qty-btn.plus:hover{background:var(--green-light)}
+.qty-num{
+  font-family:'Fredoka One',cursive;font-size:0.95rem;
+  color:var(--text);min-width:20px;text-align:center;
+}
+.add-cart-btn{
+  flex:1;background:var(--green);color:white;
+  border:none;border-radius:50px;padding:0.45rem 0.6rem;
+  font-size:0.72rem;font-weight:800;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  transition:background 0.2s;
+  white-space:nowrap;
+}
+.add-cart-btn:hover{background:var(--green-light)}
+.add-cart-btn:disabled{background:#CCC;cursor:not-allowed}
+.add-cart-btn.adicionado{background:var(--orange)}
+
+/* ===== VAZIO ===== */
+.empty{
+  text-align:center;padding:3rem 1rem;color:#7A8A7A;
+}
+.empty-icon{font-size:3rem;display:block;margin-bottom:0.8rem;opacity:0.4}
+
+/* ===== CARRINHO DRAWER ===== */
+.cart-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.5);z-index:200;
+}
+.cart-overlay.open{display:block;animation:fadeIn 0.2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.cart-drawer{
+  position:fixed;bottom:0;left:0;right:0;
+  background:white;border-radius:24px 24px 0 0;
+  z-index:201;max-height:85vh;overflow-y:auto;
+  animation:slideUp 0.3s ease;
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+
+.cart-header{
+  padding:1.2rem 1.2rem 0.8rem;
+  display:flex;align-items:center;gap:0.8rem;
+  border-bottom:1px solid #F0F0F0;
+  position:sticky;top:0;background:white;z-index:1;
+}
+.cart-title{
+  font-family:'Fredoka One',cursive;font-size:1.2rem;
+  color:var(--green-dark);flex:1;
+}
+.cart-close{
+  background:var(--gray);border:none;
+  width:32px;height:32px;border-radius:50%;
+  font-size:1rem;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.cart-body{padding:0.8rem 1.2rem}
+
+.cart-item{
+  display:flex;align-items:center;gap:0.8rem;
+  padding:0.8rem 0;border-bottom:1px solid #F5F5F5;
+}
+.cart-item-emoji{font-size:1.8rem;flex-shrink:0}
+.cart-item-info{flex:1}
+.cart-item-nome{font-weight:800;font-size:0.88rem;color:var(--text)}
+.cart-item-unid{font-size:0.72rem;color:#7A8A7A}
+.cart-item-preco{font-family:'Fredoka One',cursive;font-size:0.95rem;color:var(--green)}
+.cart-item-qty{display:flex;align-items:center;gap:0.4rem;flex-shrink:0}
+.cart-del{
+  background:rgba(229,57,53,0.1);border:none;color:var(--red);
+  width:26px;height:26px;border-radius:50%;font-size:0.85rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+
+.cart-empty{text-align:center;padding:2rem;color:#7A8A7A}
+.cart-empty-icon{font-size:2.5rem;display:block;margin-bottom:0.5rem;opacity:0.3}
+
+.cart-footer{
+  padding:1rem 1.2rem 1.5rem;
+  background:white;
+  border-top:2px solid #F0F0F0;
+  position:sticky;bottom:0;
+}
+.cart-total-wrap{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1rem;
+}
+.cart-total-label{font-size:0.85rem;color:#7A8A7A;font-weight:600}
+.cart-total-val{
+  font-family:'Fredoka One',cursive;font-size:1.4rem;color:var(--green);
+}
+.btn-enviar{
+  display:flex;align-items:center;justify-content:center;gap:0.6rem;
+  width:100%;background:#25D366;color:white;
+  border:none;padding:1rem;border-radius:50px;
+  font-size:1rem;font-weight:800;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  transition:all 0.2s;
+}
+.btn-enviar svg{width:22px;height:22px;flex-shrink:0}
+.btn-enviar:hover{background:#1da855;transform:translateY(-2px)}
+.btn-limpar{
+  display:block;width:100%;background:transparent;
+  color:#7A8A7A;border:none;padding:0.6rem;
+  font-size:0.8rem;font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;margin-top:0.5rem;
+}
+
+/* ===== LOADING ===== */
+.loading{
+  text-align:center;padding:3rem;color:#7A8A7A;
+}
+.loading-spinner{
+  width:32px;height:32px;border:3px solid #E0E0E0;
+  border-top-color:var(--green);border-radius:50%;
+  animation:spin 0.8s linear infinite;margin:0 auto 1rem;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== TOAST ===== */
+.toast{
+  position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--green-dark);color:white;
+  padding:0.7rem 1.4rem;border-radius:50px;
+  font-size:0.85rem;font-weight:700;
+  opacity:0;transition:all 0.3s;z-index:300;
+  white-space:nowrap;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== WHATSAPP FLOAT ===== */
+.wa-float{
+  position:fixed;bottom:1.2rem;right:1.2rem;z-index:50;
+  width:52px;height:52px;border-radius:50%;
+  background:#25D366;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(37,211,102,0.5);
+  text-decoration:none;animation:pulseWA 2s infinite;
+}
+@keyframes pulseWA{
+  0%,100%{box-shadow:0 4px 16px rgba(37,211,102,0.4)}
+  50%{box-shadow:0 4px 28px rgba(37,211,102,0.7)}
+}
+.wa-float svg{width:28px;height:28px}
+</style>
+</head>
+<body>
+
+<!-- SVG WA -->
+<svg style="display:none">
+  <symbol id="wa" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="24" fill="#25D366"/>
+    <path fill="#fff" d="M24 10C16.27 10 10 16.27 10 24c0 2.52.68 4.88 1.86 6.92L10 38l7.3-1.84A13.93 13.93 0 0 0 24 38c7.73 0 14-6.27 14-14S31.73 10 24 10zm0 25.4a11.33 11.33 0 0 1-5.78-1.58l-.41-.25-4.33 1.09 1.12-4.22-.27-.44A11.37 11.37 0 0 1 12.6 24c0-6.29 5.11-11.4 11.4-11.4S35.4 17.71 35.4 24 30.29 35.4 24 35.4zm6.25-8.54c-.34-.17-2.02-1-2.34-1.11-.31-.11-.54-.17-.77.17-.23.34-.88 1.11-1.08 1.34-.2.23-.4.26-.74.09-.34-.17-1.45-.54-2.76-1.72a10.4 10.4 0 0 1-1.91-2.4c-.2-.34-.02-.52.15-.69.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.23.06-.43-.03-.6-.09-.17-.77-1.86-1.06-2.54-.28-.67-.56-.58-.77-.59h-.66c-.23 0-.6.09-.91.43-.31.34-1.2 1.17-1.2 2.86 0 1.68 1.23 3.31 1.4 3.54.17.23 2.42 3.7 5.87 5.19.82.35 1.46.56 1.96.72.82.26 1.57.22 2.16.13.66-.1 2.02-.82 2.31-1.62.28-.8.28-1.48.2-1.62-.09-.14-.31-.23-.65-.4z"/>
+  </symbol>
+</svg>
+
+<!-- HEADER -->
+<div class="header">
+  <a href="index.html" class="header-back">←</a>
+  <div class="header-logo">Hortifruti <span>Catálogo de Produtos</span></div>
+  <button class="cart-btn" onclick="abrirCarrinho()">
+    🛒
+    <span class="cart-count" id="cart-count">0</span>
+  </button>
+</div>
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Buscar produto..." oninput="buscar(this.value)">
+  </div>
+</div>
+
+<!-- CATEGORIAS -->
+<div class="cats-wrap">
+  <button class="cat-chip ativo" onclick="filtrarCat('todos',this)">🌿 Todos</button>
+  <button class="cat-chip" onclick="filtrarCat('frutas',this)">🍎 Frutas</button>
+  <button class="cat-chip" onclick="filtrarCat('verduras',this)">🥬 Verduras</button>
+  <button class="cat-chip" onclick="filtrarCat('temperos',this)">🌿 Temperos</button>
+  <button class="cat-chip" onclick="filtrarCat('graos',this)">🌾 Grãos & Cereais</button>
+</div>
+
+<!-- CONTEÚDO -->
+<div class="content" id="content">
+  <div class="loading"><div class="loading-spinner"></div>Carregando produtos...</div>
+</div>
+
+<!-- CARRINHO OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="fecharCarrinho()"></div>
+
+<!-- CARRINHO DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <div class="cart-title">🛒 Meu Carrinho</div>
+    <button class="cart-close" onclick="fecharCarrinho()">✕</button>
+  </div>
+  <div class="cart-body" id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-wrap">
+      <span class="cart-total-label">Total do pedido:</span>
+      <span class="cart-total-val" id="cart-total">R$ 0,00</span>
+    </div>
+    <button class="btn-enviar" onclick="enviarWhatsApp()">
+      <svg><use href="#wa"/></svg>
+      Enviar pedido pelo WhatsApp
+    </button>
+    <button class="btn-limpar" onclick="limparCarrinho()">🗑️ Limpar carrinho</button>
+  </div>
+</div>
+
+<!-- WA FLOAT -->
+<a href="https://wa.me/5511941474285" class="wa-float" target="_blank">
+  <svg><use href="#wa"/></svg>
+</a>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore-compat.js"></script>
+<script>
+// =============================================
+// FIREBASE CONFIG
+// =============================================
+const firebaseConfig = {
+  apiKey: "AIzaSyC5ZFLt5z73v8pco0X7nzpb9N2Xlsmfrzo",
+  authDomain: "hortifruti-system.firebaseapp.com",
+  projectId: "hortifruti-system",
+  storageBucket: "hortifruti-system.firebasestorage.app",
+  messagingSenderId: "634521386120",
+  appId: "1:634521386120:web:9f93d751a45a9f8fa3b33d"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const WA_NUMBER = "5511978472942";
+
+// =============================================
+// STATE
+// =============================================
+let todosProdutos = [];
+let catAtiva = 'todos';
+let buscaAtiva = '';
+let carrinho = JSON.parse(localStorage.getItem('carrinho-feirao') || '[]');
+
+// =============================================
+// FIREBASE — carregar catálogo
+// =============================================
+db.collection('catalogo').doc('produtos').onSnapshot(doc => {
+  if (doc.exists) {
+    const data = doc.data();
+    todosProdutos = [];
+    ['frutas','verduras','temperos','graos'].forEach(cat => {
+      if (data[cat]) {
+        data[cat].forEach(p => todosProdutos.push({...p, categoria: cat}));
+      }
+    });
+  } else {
+    todosProdutos = [];
+  }
+  renderizar();
+}, err => {
+  document.getElementById('content').innerHTML =
+    '<div class="empty"><span class="empty-icon">❌</span>Erro ao carregar produtos.</div>';
+});
+
+// =============================================
+// RENDERIZAR
+// =============================================
+const catInfo = {
+  frutas:   {emoji:'🍎', label:'Frutas'},
+  verduras: {emoji:'🥬', label:'Verduras'},
+  temperos: {emoji:'🌿', label:'Temperos'},
+  graos:    {emoji:'🌾', label:'Grãos & Cereais'},
+};
+
+function renderizar() {
+  const content = document.getElementById('content');
+  let lista = todosProdutos.filter(p => {
+    const matchCat = catAtiva === 'todos' || p.categoria === catAtiva;
+    const matchBusca = !buscaAtiva || p.nome.toLowerCase().includes(buscaAtiva.toLowerCase());
+    return matchCat && matchBusca;
+  });
+
+  if (!lista.length) {
+    content.innerHTML = '<div class="empty"><span class="empty-icon">🌱</span>Nenhum produto encontrado.</div>';
+    return;
+  }
+
+  // Agrupa por categoria
+  const grupos = {};
+  lista.forEach(p => {
+    if (!grupos[p.categoria]) grupos[p.categoria] = [];
+    grupos[p.categoria].push(p);
+  });
+
+  let html = '';
+  Object.keys(grupos).forEach(cat => {
+    const info = catInfo[cat] || {emoji:'📦', label: cat};
+    html += `<div class="section-title">${info.emoji} ${info.label}</div>
+    <div class="produtos-grid">
+      ${grupos[cat].map(p => cardHTML(p)).join('')}
+    </div>`;
+  });
+
+  content.innerHTML = html;
+}
+
+function cardHTML(p) {
+  const disponivel = p.disponivel !== false;
+  const itemCarrinho = carrinho.find(c => c.id === p.id);
+  const qty = itemCarrinho ? itemCarrinho.qty : 1;
+  const imgHTML = p.img
+    ? `<img src="${p.img}" alt="${p.nome}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const fallback = p.img ? `style="display:none"` : '';
+
+  return `
+  <div class="produto-card ${!disponivel ? 'indisponivel' : ''}" id="card-${p.id}">
+    <div class="produto-img-wrap">
+      ${imgHTML}
+      <span class="produto-emoji-fallback" ${fallback}>${p.emoji || '🛒'}</span>
+      ${p.badge ? `<span class="produto-badge">${p.badge}</span>` : ''}
+      <span class="status-badge ${disponivel ? 'disponivel' : 'indisponivel'}">${disponivel ? '✅ Disponível' : '❌ Esgotado'}</span>
+    </div>
+    <div class="produto-body">
+      <div class="produto-nome">${p.nome}</div>
+      <div class="produto-unidade">${p.unidade || ''}</div>
+      <div class="produto-preco-wrap">
+        ${p.precoAntigo && p.precoAntigo !== 'R$0,00' ? `<span class="produto-preco-old">${p.precoAntigo}</span>` : ''}
+        <span class="produto-preco-new">${p.precoNovo || 'Consultar'}</span>
+      </div>
+      ${p.economia ? `<span class="produto-economia">${p.economia}</span>` : ''}
+      <div class="qty-wrap" style="margin-top:0.6rem">
+        <button class="qty-btn minus" onclick="alterarQty('${p.id}',-1)">−</button>
+        <span class="qty-num" id="qty-${p.id}">${qty}</span>
+        <button class="qty-btn plus" onclick="alterarQty('${p.id}',1)">+</button>
+        <button class="add-cart-btn ${itemCarrinho ? 'adicionado' : ''}"
+          onclick="adicionarCarrinho('${p.id}')"
+          ${!disponivel ? 'disabled' : ''}
+          id="btn-${p.id}">
+          ${!disponivel ? '❌ Esgotado' : itemCarrinho ? '✅ Adicionado' : '🛒 Adicionar'}
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+// =============================================
+// QUANTIDADE
+// =============================================
+function alterarQty(id, delta) {
+  const el = document.getElementById('qty-' + id);
+  if (!el) return;
+  let val = parseInt(el.textContent) + delta;
+  if (val < 1) val = 1;
+  el.textContent = val;
+  // Atualiza no carrinho se já estiver lá
+  const item = carrinho.find(c => c.id === id);
+  if (item) { item.qty = val; salvarCarrinho(); renderCarrinho(); }
+}
+
+// =============================================
+// CARRINHO
+// =============================================
+function adicionarCarrinho(id) {
+  const p = todosProdutos.find(p => p.id === id);
+  if (!p) return;
+  const qtyEl = document.getElementById('qty-' + id);
+  const qty = qtyEl ? parseInt(qtyEl.textContent) : 1;
+  const existente = carrinho.find(c => c.id === id);
+  if (existente) {
+    existente.qty = qty;
+  } else {
+    carrinho.push({
+      id: p.id, nome: p.nome, emoji: p.emoji || '🛒',
+      unidade: p.unidade, precoNovo: p.precoNovo,
+      categoria: p.categoria, qty
+    });
+  }
+  salvarCarrinho();
+  atualizarBadge();
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.textContent = '✅ Adicionado'; btn.classList.add('adicionado'); }
+  toast('🛒 ' + p.nome + ' adicionado!');
+}
+
+function removerCarrinho(id) {
+  carrinho = carrinho.filter(c => c.id !== id);
+  salvarCarrinho();
+  atualizarBadge();
+  renderCarrinho();
+  // Atualiza botão
+  const btn = document.getElementById('btn-' + id);
+  if (btn) { btn.textContent = '🛒 Adicionar'; btn.classList.remove('adicionado'); }
+}
+
+function limparCarrinho() {
+  if (!confirm('Limpar o carrinho?')) return;
+  carrinho = [];
+  salvarCarrinho();
+  atualizarBadge();
+  renderCarrinho();
+  renderizar();
+}
+
+function salvarCarrinho() {
+  localStorage.setItem('carrinho-feirao', JSON.stringify(carrinho));
+}
+
+function atualizarBadge() {
+  const total = carrinho.reduce((s, c) => s + c.qty, 0);
+  const badge = document.getElementById('cart-count');
+  badge.textContent = total;
+  badge.classList.toggle('show', total > 0);
+}
+
+function abrirCarrinho() {
+  renderCarrinho();
+  document.getElementById('cart-overlay').classList.add('open');
+  document.getElementById('cart-drawer').style.display = 'block';
+}
+
+function fecharCarrinho() {
+  document.getElementById('cart-overlay').classList.remove('open');
+  document.getElementById('cart-drawer').style.display = 'none';
+}
+
+function renderCarrinho() {
+  const body = document.getElementById('cart-body');
+  if (!carrinho.length) {
+    body.innerHTML = '<div class="cart-empty"><span class="cart-empty-icon">🛒</span>Seu carrinho está vazio.</div>';
+    document.getElementById('cart-total').textContent = 'R$ 0,00';
+    return;
+  }
+  let total = 0;
+  body.innerHTML = carrinho.map(item => {
+    const preco = parseFloat((item.precoNovo || '0').replace('R$','').replace(',','.')) || 0;
+    const subtotal = preco * item.qty;
+    total += subtotal;
+    return `
+    <div class="cart-item">
+      <span class="cart-item-emoji">${item.emoji}</span>
+      <div class="cart-item-info">
+        <div class="cart-item-nome">${item.nome}</div>
+        <div class="cart-item-unid">${item.unidade || ''}</div>
+        <div class="cart-item-preco">${item.precoNovo} × ${item.qty}</div>
+      </div>
+      <div class="cart-item-qty">
+        <button class="qty-btn minus" onclick="alterarQtyCarrinho('${item.id}',-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn plus" onclick="alterarQtyCarrinho('${item.id}',1)">+</button>
+        <button class="cart-del" onclick="removerCarrinho('${item.id}')">🗑</button>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('cart-total').textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+}
+
+function alterarQtyCarrinho(id, delta) {
+  const item = carrinho.find(c => c.id === id);
+  if (!item) return;
+  item.qty = Math.max(1, item.qty + delta);
+  salvarCarrinho();
+  renderCarrinho();
+}
+
+// =============================================
+// ENVIAR WHATSAPP
+// =============================================
+function enviarWhatsApp() {
+  if (!carrinho.length) { toast('❌ Carrinho vazio!'); return; }
+  let msg = '🌿 *Pedido — Hortifruti*\n\n';
+  let total = 0;
+  carrinho.forEach(item => {
+    const preco = parseFloat((item.precoNovo || '0').replace('R$','').replace(',','.')) || 0;
+    msg += `• ${item.emoji} *${item.nome}* — ${item.qty}x ${item.precoNovo}\n`;
+    total += preco * item.qty;
+  });
+  msg += `\n💰 *Total: R$ ${total.toFixed(2).replace('.',',')}*`;
+  msg += '\n\n📍 Aguardo confirmação e endereço de entrega!';
+  window.open(`https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// =============================================
+// FILTROS
+// =============================================
+function filtrarCat(cat, btn) {
+  catAtiva = cat;
+  document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+  renderizar();
+}
+
+function buscar(val) {
+  buscaAtiva = val;
+  renderizar();
+}
+
+// =============================================
+// TOAST
+// =============================================
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// INIT
+atualizarBadge();
+</script>
+</body>
+</html>

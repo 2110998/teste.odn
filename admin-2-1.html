@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --green:#1A7A2E;--green-dark:#0F4F1C;--green-light:#2EAA47;
+  --yellow:#F5C800;--orange:#FF7A00;--red:#E53935;--purple:#6A2A9A;
+}
+body{font-family:'Nunito',sans-serif;background:#F4F6F4;color:#1A2E1A}
+
+/* LOGIN */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--green-dark),var(--green))}
+.login-box{background:white;border-radius:24px;padding:3rem 2.5rem;width:100%;max-width:380px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3)}
+.login-box .logo{font-family:'Fredoka One',cursive;font-size:1.6rem;color:var(--green-dark);margin-bottom:0.3rem}
+.login-box .sub{font-size:0.85rem;color:#7A8A7A;margin-bottom:2rem}
+.login-box input{width:100%;padding:0.9rem 1.2rem;border:2px solid #E0E0E0;border-radius:12px;font-size:1rem;font-family:'Nunito',sans-serif;outline:none;transition:border 0.2s;margin-bottom:1rem}
+.login-box input:focus{border-color:var(--green)}
+.login-box button{width:100%;background:var(--green);color:white;border:none;padding:1rem;border-radius:12px;font-size:1rem;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;transition:background 0.2s}
+.login-box button:hover{background:#2EAA47}
+.login-error{color:var(--red);font-size:0.82rem;margin-top:0.8rem;display:none}
+
+/* PAINEL */
+.painel{display:none}
+.painel-header{background:var(--green-dark);padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.8rem}
+.painel-header .logo{font-family:'Fredoka One',cursive;font-size:1.3rem;color:var(--yellow)}
+.painel-header .logo span{color:white;font-family:'Nunito',sans-serif;font-size:0.8rem;font-weight:400}
+.btn-sair{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);padding:0.4rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s}
+.btn-sair:hover{background:rgba(255,255,255,0.2)}
+
+/* MENU PRINCIPAL */
+.menu-principal{background:white;border-bottom:2px solid #E0E0E0;display:flex;overflow-x:auto}
+.menu-principal::-webkit-scrollbar{display:none}
+.menu-item{flex-shrink:0;padding:1rem 1.5rem;font-size:0.9rem;font-weight:800;cursor:pointer;border-bottom:3px solid transparent;transition:all 0.2s;color:#7A8A7A;font-family:'Nunito',sans-serif;border:none;background:transparent}
+.menu-item:hover{color:var(--green)}
+.menu-item.ativo{color:var(--green);border-bottom:3px solid var(--green)}
+
+/* SEÇÕES */
+.secao{display:none;padding:2rem;max-width:900px;margin:0 auto}
+.secao.ativo{display:block}
+.secao-title{font-family:'Fredoka One',cursive;font-size:1.8rem;color:var(--green-dark);margin-bottom:0.3rem}
+.secao-sub{font-size:0.9rem;color:#7A8A7A;margin-bottom:2rem}
+
+/* ABAS */
+.abas{display:flex;gap:0.8rem;margin-bottom:2rem;flex-wrap:wrap}
+.aba{padding:0.6rem 1.4rem;border-radius:50px;font-size:0.85rem;font-weight:800;cursor:pointer;border:2px solid transparent;font-family:'Nunito',sans-serif;transition:all 0.2s;background:white}
+.aba.verduras{color:#1A7A2E;border-color:#1A7A2E}
+.aba.verduras.ativo{background:#1A7A2E;color:white}
+.aba.frutas{color:#CC5500;border-color:#CC5500}
+.aba.frutas.ativo{background:#CC5500;color:white}
+.aba.temperos{color:#6A2A9A;border-color:#6A2A9A}
+.aba.temperos.ativo{background:#6A2A9A;color:white}
+.aba.graos{color:#996600;border-color:#996600}
+.aba.graos.ativo{background:#996600;color:white}
+
+/* PRODUTOS */
+.produtos-lista{display:flex;flex-direction:column;gap:1rem}
+.produto-item{background:white;border-radius:16px;padding:1.2rem 1.5rem;display:grid;grid-template-columns:80px 1fr 1fr 1fr auto;gap:1rem;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.06);border:2px solid transparent;transition:border 0.2s}
+.produto-item:hover{border-color:#E0E0E0}
+.produto-thumb{width:70px;height:70px;border-radius:12px;object-fit:cover;background:#f0f8f0}
+.produto-item label{font-size:0.72rem;font-weight:800;color:#9AAA9A;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.3rem}
+.produto-item input,.produto-item select{width:100%;padding:0.5rem 0.7rem;border:1.5px solid #E0E0E0;border-radius:8px;font-size:0.88rem;font-family:'Nunito',sans-serif;outline:none;transition:border 0.2s}
+.produto-item input:focus,.produto-item select:focus{border-color:var(--green)}
+.btn-salvar-produto{background:var(--green);color:white;border:none;padding:0.6rem 1.2rem;border-radius:10px;font-size:0.8rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;white-space:nowrap}
+.btn-salvar-produto:hover{background:#2EAA47}
+.btn-salvar-produto.salvando{background:#AAA}
+.btn-adicionar{margin-top:1.2rem;background:white;color:var(--green);border:2px dashed var(--green);padding:0.8rem 2rem;border-radius:12px;font-size:0.9rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%;transition:all 0.2s}
+.btn-adicionar:hover{background:#f0faf0}
+.btn-excluir{background:#fff0f0;color:var(--red);border:1.5px solid #ffcdd2;padding:0.6rem 0.9rem;border-radius:10px;font-size:0.8rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s;white-space:nowrap}
+.btn-excluir:hover{background:#ffcdd2}
+.produto-acoes{display:flex;flex-direction:column;gap:0.5rem;align-items:stretch}
+.btn-novo-produto{background:var(--yellow);color:var(--green-dark);border:none;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.85rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s}
+.btn-novo-produto:hover{background:#ffe033}
+
+/* STATUS */
+.status-bar{background:#E8F5E9;color:var(--green);padding:0.6rem 1.2rem;border-radius:10px;font-size:0.82rem;font-weight:700;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem}
+.status-bar.erro{background:#FFEBEE;color:var(--red)}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.55);align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.aberto{display:flex}
+.modal-box{background:white;border-radius:20px;width:100%;max-width:560px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;animation:modalIn 0.25s ease}
+@keyframes modalIn{from{transform:scale(0.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-header{background:var(--green-dark);padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--yellow)}
+.modal-close{background:rgba(255,255,255,0.1);border:none;color:white;width:32px;height:32px;border-radius:50%;font-size:0.9rem;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s}
+.modal-close:hover{background:rgba(255,255,255,0.25)}
+.modal-body{padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-height:65vh;overflow-y:auto}
+.modal-field{display:flex;flex-direction:column;gap:0.4rem}
+.modal-field.full{grid-column:1/-1}
+.modal-field label{font-size:0.72rem;font-weight:800;color:#9AAA9A;text-transform:uppercase;letter-spacing:0.08em}
+.modal-field input,.modal-field select{padding:0.6rem 0.8rem;border:1.5px solid #E0E0E0;border-radius:8px;font-size:0.88rem;font-family:'Nunito',sans-serif;outline:none;transition:border 0.2s}
+.modal-field input:focus,.modal-field select:focus{border-color:var(--green)}
+.cat-selector{display:flex;gap:0.6rem;flex-wrap:wrap}
+.cat-btn{padding:0.5rem 1.1rem;border-radius:50px;font-size:0.82rem;font-weight:800;cursor:pointer;border:2px solid transparent;font-family:'Nunito',sans-serif;background:white;transition:all 0.2s}
+.cat-btn.verduras{color:#1A7A2E;border-color:#1A7A2E}
+.cat-btn.verduras.ativo{background:#1A7A2E;color:white}
+.cat-btn.frutas{color:#CC5500;border-color:#CC5500}
+.cat-btn.frutas.ativo{background:#CC5500;color:white}
+.cat-btn.temperos{color:#6A2A9A;border-color:#6A2A9A}
+.cat-btn.temperos.ativo{background:#6A2A9A;color:white}
+.cat-btn.graos{color:#996600;border-color:#996600}
+.cat-btn.graos.ativo{background:#996600;color:white}
+.modal-footer{padding:1rem 1.5rem;border-top:1px solid #F0F0F0;display:flex;justify-content:flex-end;gap:0.8rem}
+.btn-cancelar{background:white;color:#888;border:1.5px solid #E0E0E0;padding:0.7rem 1.5rem;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;transition:all 0.2s}
+.btn-cancelar:hover{border-color:#ccc;color:#555}
+.btn-cadastrar{background:var(--green);color:white;border:none;padding:0.7rem 1.8rem;border-radius:10px;font-size:0.85rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:background 0.2s}
+.btn-cadastrar:hover{background:#2EAA47}
+.btn-cadastrar:disabled{background:#aaa;cursor:not-allowed}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--green-dark);color:white;padding:0.8rem 2rem;border-radius:50px;font-size:0.88rem;font-weight:700;transition:transform 0.3s ease;z-index:9999}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:700px){
+  .produto-item{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .produto-thumb{width:50px;height:50px}
+  .secao{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast">✅ Salvo!</div>
+
+<!-- MODAL PROMOÇÕES -->
+<div class="modal-overlay" id="modal-overlay" onclick="fecharModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">＋ Novo Produto em Promoção</div>
+      <button class="modal-close" onclick="fecharModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field full">
+        <label>Categoria</label>
+        <div class="cat-selector">
+          <button class="cat-btn verduras ativo" onclick="selecionarCat('verduras',this)">🥬 Verduras</button>
+          <button class="cat-btn frutas" onclick="selecionarCat('frutas',this)">🍎 Frutas</button>
+          <button class="cat-btn temperos" onclick="selecionarCat('temperos',this)">🌿 Temperos</button>
+        </div>
+      </div>
+      <div class="modal-field"><label>Nome do Produto</label><input type="text" id="novo-nome" placeholder="Ex: Alface Crespa"/></div>
+      <div class="modal-field"><label>Unidade</label><input type="text" id="novo-unidade" placeholder="Ex: O pé, O kg"/></div>
+      <div class="modal-field"><label>Preço Antigo</label><input type="text" id="novo-precoAntigo" placeholder="Ex: R$3,50"/></div>
+      <div class="modal-field"><label>Preço Novo</label><input type="text" id="novo-precoNovo" placeholder="Ex: R$1,99"/></div>
+      <div class="modal-field"><label>Economia</label><input type="text" id="novo-economia" placeholder="Ex: Economize R$1,51"/></div>
+      <div class="modal-field"><label>Badge (opcional)</label><input type="text" id="novo-badge" placeholder="Ex: Oferta!, 🔥 Hot!"/></div>
+      <div class="modal-field full"><label>URL da Imagem (opcional)</label><input type="text" id="novo-img" placeholder="https://..."/></div>
+      <div class="modal-field"><label>Emoji (fallback)</label><input type="text" id="novo-emoji" placeholder="Ex: 🥬"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
+      <button class="btn-cadastrar" id="btn-cadastrar" onclick="cadastrarProduto()">✅ Cadastrar Produto</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CATÁLOGO -->
+<div class="modal-overlay" id="modal-catalogo" onclick="fecharModalCatalogo(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">＋ Adicionar ao Catálogo</div>
+      <button class="modal-close" onclick="fecharModalCatalogo()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field full">
+        <label>Categoria</label>
+        <div class="cat-selector">
+          <button class="cat-btn frutas ativo" onclick="selecionarCatCatalogo('frutas',this)">🍎 Frutas</button>
+          <button class="cat-btn verduras" onclick="selecionarCatCatalogo('verduras',this)">🥬 Verduras</button>
+          <button class="cat-btn temperos" onclick="selecionarCatCatalogo('temperos',this)">🌿 Temperos</button>
+          <button class="cat-btn graos" onclick="selecionarCatCatalogo('graos',this)">🌾 Grãos</button>
+        </div>
+      </div>
+      <div class="modal-field"><label>Nome do Produto</label><input type="text" id="cat-nome" placeholder="Ex: Manga Palmer"/></div>
+      <div class="modal-field"><label>Emoji</label><input type="text" id="cat-emoji" placeholder="Ex: 🥭" maxlength="2"/></div>
+      <div class="modal-field"><label>Unidade</label><input type="text" id="cat-unidade" placeholder="Ex: A unidade, O kg"/></div>
+      <div class="modal-field"><label>Preço</label><input type="text" id="cat-preco" placeholder="Ex: R$3,99"/></div>
+      <div class="modal-field"><label>Preço Antigo (opcional)</label><input type="text" id="cat-precoAntigo" placeholder="Ex: R$6,00"/></div>
+      <div class="modal-field"><label>Economia (opcional)</label><input type="text" id="cat-economia" placeholder="Ex: Economize R$2,01"/></div>
+      <div class="modal-field"><label>Badge (opcional)</label><input type="text" id="cat-badge" placeholder="Ex: 🔥 Hot!"/></div>
+      <div class="modal-field full"><label>URL da Imagem (opcional)</label><input type="text" id="cat-img" placeholder="https://..."/></div>
+      <div class="modal-field full">
+        <label>Disponibilidade</label>
+        <select id="cat-disponivel">
+          <option value="true">✅ Disponível</option>
+          <option value="false">❌ Indisponível / Esgotado</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancelar" onclick="fecharModalCatalogo()">Cancelar</button>
+      <button class="btn-cadastrar" id="btn-cadastrar-cat" onclick="cadastrarCatalogo()">✅ Adicionar ao Catálogo</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-screen" id="login-screen">
+  <div class="login-box">
+    <div class="logo">Hortifruti</div>
+    <div class="sub">Painel do Administrador</div>
+    <input type="password" id="senha-input" placeholder="Digite a senha"/>
+    <button onclick="fazerLogin()">Entrar</button>
+    <div class="login-error" id="login-error">Senha incorreta. Tente novamente.</div>
+  </div>
+</div>
+
+<!-- PAINEL -->
+<div class="painel" id="painel">
+  <div class="painel-header">
+    <div class="logo">Hortifruti <span>— Painel Admin</span></div>
+    <div style="display:flex;gap:0.8rem;align-items:center;flex-wrap:wrap">
+      <button onclick="limparTodosProdutos()" style="background:#E53935;color:white;border:none;padding:0.5rem 1.2rem;border-radius:50px;font-size:0.82rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">🗑️ Limpar Promoções</button>
+      <button class="btn-novo-produto" onclick="abrirModal()">＋ Promoção</button>
+      <button class="btn-novo-produto" style="background:#2196F3" onclick="abrirModalCatalogo()">＋ Catálogo</button>
+      <button class="btn-sair" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <!-- MENU -->
+  <div class="menu-principal">
+    <button class="menu-item ativo" onclick="trocarSecao('promocoes',this)">🔥 Promoções</button>
+    <button class="menu-item" onclick="trocarSecao('catalogo-admin',this)">🛒 Catálogo</button>
+    <button class="menu-item" onclick="trocarSecao('config-promocao',this)">⏱️ Tempo Promoção</button>
+  </div>
+
+  <!-- SEÇÃO PROMOÇÕES -->
+  <div class="secao ativo" id="secao-promocoes">
+    <div class="secao-title">Gerenciar Promoções</div>
+    <div class="secao-sub">Edite os produtos em promoção. As mudanças aparecem no site em tempo real!</div>
+    <div class="status-bar" id="status-bar">🔄 Carregando...</div>
+    <div class="abas">
+      <button class="aba verduras ativo" onclick="trocarAba('verduras')">🥬 Verduras</button>
+      <button class="aba frutas" onclick="trocarAba('frutas')">🍎 Frutas</button>
+      <button class="aba temperos" onclick="trocarAba('temperos')">🌿 Temperos</button>
+    </div>
+    <div class="produtos-lista" id="produtos-lista"></div>
+  </div>
+
+<!-- temporizador novo -->
+
+<div class="secao" id="secao-config-promocao">
+  <div class="secao-title">⏱️ Tempo da Promoção</div>
+  <div class="secao-sub">Defina o início e fim. Quando acabar, os produtos em promoção são removidos automaticamente!</div>
+  <div class="status-bar" id="status-config">⏳ Carregando...</div>
+  <div style="background:white;border-radius:16px;padding:2rem;box-shadow:0 2px 10px rgba(0,0,0,0.06);max-width:500px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem">
+      <div>
+        <label style="font-size:0.72rem;font-weight:800;color:#9AAA9A;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Início da Promoção</label>
+        <input type="datetime-local" id="config-inicio" style="width:100%;padding:0.65rem 0.8rem;border:1.5px solid #E0E0E0;border-radius:8px;font-size:0.88rem;font-family:'Nunito',sans-serif;outline:none"/>
+      </div>
+      <div>
+        <label style="font-size:0.72rem;font-weight:800;color:#9AAA9A;text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:0.4rem">Fim da Promoção</label>
+        <input type="datetime-local" id="config-fim" style="width:100%;padding:0.65rem 0.8rem;border:1.5px solid #E0E0E0;border-radius:8px;font-size:0.88rem;font-family:'Nunito',sans-serif;outline:none"/>
+      </div>
+    </div>
+    <button onclick="salvarConfigPromocao()" style="background:var(--green);color:white;border:none;padding:0.9rem 2rem;border-radius:50px;font-size:0.9rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;width:100%">💾 Salvar Configuração</button>
+    <div id="config-preview" style="margin-top:1.2rem;padding:1rem;background:#F4F6F4;border-radius:10px;font-size:0.85rem;color:#5A6A5A;display:none"></div>
+  </div>
+</div>
+
+  <!-- SEÇÃO CATÁLOGO -->
+  <div class="secao" id="secao-catalogo-admin">
+    <div class="secao-title">Gerenciar Catálogo</div>
+    <div class="secao-sub">Cadastre todos os produtos da loja. Os clientes verão no catálogo com opção de adicionar ao carrinho!</div>
+    <div class="status-bar" id="status-catalogo">🔄 Carregando catálogo...</div>
+    <div class="abas">
+      <button class="aba frutas ativo" onclick="trocarAbaCatalogo('frutas')">🍎 Frutas</button>
+      <button class="aba verduras" onclick="trocarAbaCatalogo('verduras')">🥬 Verduras</button>
+      <button class="aba temperos" onclick="trocarAbaCatalogo('temperos')">🌿 Temperos</button>
+      <button class="aba graos" onclick="trocarAbaCatalogo('graos')">🌾 Grãos</button>
+    </div>
+    <div class="produtos-lista" id="catalogo-lista"></div>
+  </div>
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore-compat.js"></script>
+<script>
+const SENHA_ADMIN = "teste123";
+const firebaseConfig = {
+    apiKey: "AIzaSyC5ZFLt5z73v8pco0X7nzpb9N2Xlsmfrzo",
+    authDomain: "hortifruti-system.firebaseapp.com",
+    projectId: "hortifruti-system",
+    storageBucket: "hortifruti-system.firebasestorage.app",
+    messagingSenderId: "634521386120",
+    appId: "1:634521386120:web:9f93d751a45a9f8fa3b33d",
+    measurementId: "G-YF5KJH1BPD"
+  
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const DADOS_PADRAO = { verduras:[], frutas:[], temperos:[] };
+
+let categoriaAtiva = "verduras";
+let dadosAtuais = {};
+let catCatalogoAtiva = "frutas";
+let dadosCatalogo = {};
+
+// ===== LOGIN =====
+function fazerLogin() {
+  const senha = document.getElementById('senha-input').value;
+  if (senha === SENHA_ADMIN) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('painel').style.display = 'block';
+    carregarProdutos();
+    carregarCatalogo();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+document.getElementById('senha-input').addEventListener('keypress', e => { if(e.key==='Enter') fazerLogin(); });
+function sair() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('painel').style.display = 'none';
+  document.getElementById('senha-input').value = '';
+}
+
+// ===== MENU =====
+function trocarSecao(id, btn) {
+  document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativo'));
+  document.querySelectorAll('.menu-item').forEach(b => b.classList.remove('ativo'));
+  document.getElementById('secao-' + id).classList.add('ativo');
+  btn.classList.add('ativo');
+}
+
+// ===========================
+// PROMOÇÕES
+// ===========================
+async function carregarProdutos() {
+  const sb = document.getElementById('status-bar');
+  try {
+    const doc = await db.collection('promocoes').doc('produtos').get();
+    dadosAtuais = doc.exists ? doc.data() : JSON.parse(JSON.stringify(DADOS_PADRAO));
+    if (!doc.exists) await db.collection('promocoes').doc('produtos').set(dadosAtuais);
+    sb.textContent = '✅ Promoções carregadas!';
+    renderizarProdutos();
+  } catch(e) {
+    sb.className = 'status-bar erro';
+    sb.textContent = '❌ Erro ao carregar.';
+  }
+}
+
+function renderizarProdutos() {
+  const lista = document.getElementById('produtos-lista');
+  const produtos = dadosAtuais[categoriaAtiva] || [];
+  if (!produtos.length) {
+    lista.innerHTML = '<div style="text-align:center;padding:2rem;color:#7A8A7A">Nenhum produto nesta categoria.</div>';
+    return;
+  }
+  lista.innerHTML = produtos.map((p,i) => `
+    <div class="produto-item">
+      <img class="produto-thumb" src="${p.img||''}" onerror="this.src=''" alt="${p.nome}"/>
+      <div>
+        <label>Nome</label>
+        <input type="text" id="${categoriaAtiva}_${i}_nome" value="${p.nome}"/>
+      </div>
+      <div>
+        <label>Preço Antigo</label>
+        <input type="text" id="${categoriaAtiva}_${i}_precoAntigo" value="${p.precoAntigo}"/>
+        <label style="margin-top:0.5rem">Preço Novo</label>
+        <input type="text" id="${categoriaAtiva}_${i}_precoNovo" value="${p.precoNovo}"/>
+      </div>
+      <div>
+        <label>Economia</label>
+        <input type="text" id="${categoriaAtiva}_${i}_economia" value="${p.economia}"/>
+        <label style="margin-top:0.5rem">Badge</label>
+        <input type="text" id="${categoriaAtiva}_${i}_badge" value="${p.badge}" placeholder="Ex: Oferta!"/>
+      </div>
+      <div class="produto-acoes">
+        <button class="btn-salvar-produto" id="btn-salvar-${i}" onclick="salvarProduto(${i})">💾 Salvar</button>
+        <button class="btn-excluir" onclick="excluirProduto(${i})">🗑️ Excluir</button>
+      </div>
+    </div>`).join('');
+}
+
+function coletarDados(i) {
+  return {
+    ...dadosAtuais[categoriaAtiva][i],
+    nome:        document.getElementById(`${categoriaAtiva}_${i}_nome`).value,
+    precoAntigo: document.getElementById(`${categoriaAtiva}_${i}_precoAntigo`).value,
+    precoNovo:   document.getElementById(`${categoriaAtiva}_${i}_precoNovo`).value,
+    economia:    document.getElementById(`${categoriaAtiva}_${i}_economia`).value,
+    badge:       document.getElementById(`${categoriaAtiva}_${i}_badge`).value,
+  };
+}
+
+window.salvarProduto = async function(i) {
+  dadosAtuais[categoriaAtiva][i] = coletarDados(i);
+  const btn = document.getElementById(`btn-salvar-${i}`);
+  btn.textContent = '...'; btn.classList.add('salvando');
+  try {
+    await db.collection('promocoes').doc('produtos').set(dadosAtuais);
+    mostrarToast('✅ Salvo com sucesso!');
+  } catch(e) { mostrarToast('❌ Erro ao salvar!'); }
+  btn.textContent = '💾 Salvar'; btn.classList.remove('salvando');
+};
+
+window.excluirProduto = async function(i) {
+  if (!confirm(`Excluir "${dadosAtuais[categoriaAtiva][i].nome}"?`)) return;
+  dadosAtuais[categoriaAtiva].splice(i, 1);
+  try {
+    await db.collection('promocoes').doc('produtos').set(dadosAtuais);
+    mostrarToast('🗑️ Produto excluído!');
+  } catch(e) { mostrarToast('❌ Erro ao excluir!'); }
+  renderizarProdutos();
+};
+
+async function limparTodosProdutos() {
+  if (!confirm('⚠️ Apagar TODOS os produtos em promoção?')) return;
+  try {
+    await db.collection('promocoes').doc('produtos').set({ verduras:[], frutas:[], temperos:[] });
+    dadosAtuais = { verduras:[], frutas:[], temperos:[] };
+    mostrarToast('✅ Promoções removidas!');
+    renderizarProdutos();
+  } catch(e) { mostrarToast('❌ Erro ao limpar!'); }
+}
+
+async function adicionarProduto() {
+  const novo = { id: categoriaAtiva[0]+Date.now(), nome:'Novo Produto', unidade:'A unidade', precoAntigo:'R$0,00', precoNovo:'R$0,00', economia:'', badge:'', img:'', emoji:'🛒' };
+  dadosAtuais[categoriaAtiva].push(novo);
+  try { await db.collection('promocoes').doc('produtos').set(dadosAtuais); mostrarToast('✅ Adicionado!'); }
+  catch(e) { mostrarToast('❌ Erro!'); }
+  renderizarProdutos();
+  document.getElementById('produtos-lista').lastElementChild?.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+let catModal = 'verduras';
+function abrirModal() {
+  document.getElementById('modal-overlay').classList.add('aberto');
+  ['nome','unidade','precoAntigo','precoNovo','economia','badge','img','emoji'].forEach(f => document.getElementById('novo-'+f).value='');
+  catModal = 'verduras';
+  document.querySelectorAll('#modal-overlay .cat-btn').forEach(b => b.classList.remove('ativo'));
+  document.querySelector('#modal-overlay .cat-btn.verduras').classList.add('ativo');
+}
+function fecharModal(e) {
+  if (e && e.target !== document.getElementById('modal-overlay')) return;
+  document.getElementById('modal-overlay').classList.remove('aberto');
+}
+function selecionarCat(cat, btn) {
+  catModal = cat;
+  document.querySelectorAll('#modal-overlay .cat-btn').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+}
+async function cadastrarProduto() {
+  const nome = document.getElementById('novo-nome').value.trim();
+  if (!nome) { mostrarToast('⚠️ Informe o nome!'); return; }
+  const btn = document.getElementById('btn-cadastrar');
+  btn.disabled = true; btn.textContent = '...';
+  const novo = {
+    id: catModal[0]+Date.now(), nome,
+    unidade:     document.getElementById('novo-unidade').value.trim()     || 'A unidade',
+    precoAntigo: document.getElementById('novo-precoAntigo').value.trim() || 'R$0,00',
+    precoNovo:   document.getElementById('novo-precoNovo').value.trim()   || 'R$0,00',
+    economia:    document.getElementById('novo-economia').value.trim()    || '',
+    badge:       document.getElementById('novo-badge').value.trim()       || '',
+    img:         document.getElementById('novo-img').value.trim()         || '',
+    emoji:       document.getElementById('novo-emoji').value.trim()       || '🛒',
+  };
+  if (!dadosAtuais[catModal]) dadosAtuais[catModal] = [];
+  dadosAtuais[catModal].push(novo);
+  try {
+    await db.collection('promocoes').doc('produtos').set(dadosAtuais);
+    mostrarToast(`✅ "${nome}" cadastrado em promoções!`);
+    document.getElementById('modal-overlay').classList.remove('aberto');
+    if (categoriaAtiva === catModal) renderizarProdutos();
+  } catch(e) { mostrarToast('❌ Erro ao cadastrar!'); }
+  btn.disabled = false; btn.textContent = '✅ Cadastrar Produto';
+}
+
+function trocarAba(cat) {
+  categoriaAtiva = cat;
+  document.querySelectorAll('#secao-promocoes .aba').forEach(a => a.classList.remove('ativo'));
+  document.querySelector(`#secao-promocoes .aba.${cat}`).classList.add('ativo');
+  renderizarProdutos();
+}
+
+// ===========================
+// CATÁLOGO
+// ===========================
+async function carregarCatalogo() {
+  const sb = document.getElementById('status-catalogo');
+  try {
+    const doc = await db.collection('catalogo').doc('produtos').get();
+    dadosCatalogo = doc.exists ? doc.data() : { frutas:[], verduras:[], temperos:[], graos:[] };
+    if (!doc.exists) await db.collection('catalogo').doc('produtos').set(dadosCatalogo);
+    sb.textContent = '✅ Catálogo carregado!';
+    renderizarCatalogo();
+  } catch(e) {
+    sb.className = 'status-bar erro';
+    sb.textContent = '❌ Erro ao carregar catálogo.';
+  }
+}
+
+function renderizarCatalogo() {
+  const lista = document.getElementById('catalogo-lista');
+  const produtos = dadosCatalogo[catCatalogoAtiva] || [];
+  if (!produtos.length) {
+    lista.innerHTML = '<div style="text-align:center;padding:2rem;color:#7A8A7A">Nenhum produto nesta categoria. Clique em "+ Catálogo" para adicionar!</div>';
+    return;
+  }
+  lista.innerHTML = produtos.map((p,i) => `
+    <div class="produto-item">
+      <img class="produto-thumb" src="${p.img||''}" onerror="this.src=''" alt="${p.nome}"/>
+      <div>
+        <label>Nome</label>
+        <input type="text" id="cat_${catCatalogoAtiva}_${i}_nome" value="${p.nome}"/>
+        <label style="margin-top:0.5rem">Emoji</label>
+        <input type="text" id="cat_${catCatalogoAtiva}_${i}_emoji" value="${p.emoji||''}" maxlength="2" style="width:60px"/>
+      </div>
+      <div>
+        <label>Preço</label>
+        <input type="text" id="cat_${catCatalogoAtiva}_${i}_preco" value="${p.precoNovo||''}"/>
+        <label style="margin-top:0.5rem">Unidade</label>
+        <input type="text" id="cat_${catCatalogoAtiva}_${i}_unidade" value="${p.unidade||''}"/>
+      </div>
+      <div>
+        <label>Disponível</label>
+        <select id="cat_${catCatalogoAtiva}_${i}_disponivel">
+          <option value="true" ${p.disponivel!==false?'selected':''}>✅ Disponível</option>
+          <option value="false" ${p.disponivel===false?'selected':''}>❌ Esgotado</option>
+        </select>
+        <label style="margin-top:0.5rem">Badge</label>
+        <input type="text" id="cat_${catCatalogoAtiva}_${i}_badge" value="${p.badge||''}" placeholder="Ex: 🔥 Hot!"/>
+      </div>
+      <div class="produto-acoes">
+        <button class="btn-salvar-produto" onclick="salvarItemCatalogo(${i})">💾 Salvar</button>
+        <button class="btn-excluir" onclick="excluirItemCatalogo(${i})">🗑️ Excluir</button>
+      </div>
+    </div>`).join('');
+}
+
+window.salvarItemCatalogo = async function(i) {
+  const p = dadosCatalogo[catCatalogoAtiva][i];
+  dadosCatalogo[catCatalogoAtiva][i] = {
+    ...p,
+    nome:       document.getElementById(`cat_${catCatalogoAtiva}_${i}_nome`).value,
+    emoji:      document.getElementById(`cat_${catCatalogoAtiva}_${i}_emoji`).value,
+    precoNovo:  document.getElementById(`cat_${catCatalogoAtiva}_${i}_preco`).value,
+    unidade:    document.getElementById(`cat_${catCatalogoAtiva}_${i}_unidade`).value,
+    disponivel: document.getElementById(`cat_${catCatalogoAtiva}_${i}_disponivel`).value === 'true',
+    badge:      document.getElementById(`cat_${catCatalogoAtiva}_${i}_badge`).value,
+  };
+  try {
+    await db.collection('catalogo').doc('produtos').set(dadosCatalogo);
+    mostrarToast('✅ Salvo no catálogo!');
+  } catch(e) { mostrarToast('❌ Erro ao salvar!'); }
+};
+
+window.excluirItemCatalogo = async function(i) {
+  if (!confirm(`Excluir "${dadosCatalogo[catCatalogoAtiva][i].nome}" do catálogo?`)) return;
+  dadosCatalogo[catCatalogoAtiva].splice(i, 1);
+  try {
+    await db.collection('catalogo').doc('produtos').set(dadosCatalogo);
+    mostrarToast('🗑️ Removido do catálogo!');
+  } catch(e) { mostrarToast('❌ Erro!'); }
+  renderizarCatalogo();
+};
+
+let catModalCatalogo = 'frutas';
+function abrirModalCatalogo() {
+  document.getElementById('modal-catalogo').classList.add('aberto');
+  ['nome','emoji','unidade','preco','precoAntigo','economia','badge','img'].forEach(f => { const el = document.getElementById('cat-'+f); if(el) el.value=''; });
+  document.getElementById('cat-disponivel').value = 'true';
+  catModalCatalogo = 'frutas';
+  document.querySelectorAll('#modal-catalogo .cat-btn').forEach(b => b.classList.remove('ativo'));
+  document.querySelector('#modal-catalogo .cat-btn.frutas').classList.add('ativo');
+}
+function fecharModalCatalogo(e) {
+  if (e && e.target !== document.getElementById('modal-catalogo')) return;
+  document.getElementById('modal-catalogo').classList.remove('aberto');
+}
+function selecionarCatCatalogo(cat, btn) {
+  catModalCatalogo = cat;
+  document.querySelectorAll('#modal-catalogo .cat-btn').forEach(b => b.classList.remove('ativo'));
+  btn.classList.add('ativo');
+}
+async function cadastrarCatalogo() {
+  const nome = document.getElementById('cat-nome').value.trim();
+  if (!nome) { mostrarToast('⚠️ Informe o nome!'); return; }
+  const btn = document.getElementById('btn-cadastrar-cat');
+  btn.disabled = true; btn.textContent = '...';
+  const novo = {
+    id: catModalCatalogo[0]+Date.now(), nome,
+    emoji:       document.getElementById('cat-emoji').value.trim()       || '🛒',
+    unidade:     document.getElementById('cat-unidade').value.trim()     || 'A unidade',
+    precoNovo:   document.getElementById('cat-preco').value.trim()       || 'Consultar',
+    precoAntigo: document.getElementById('cat-precoAntigo').value.trim() || '',
+    economia:    document.getElementById('cat-economia').value.trim()    || '',
+    badge:       document.getElementById('cat-badge').value.trim()       || '',
+    img:         document.getElementById('cat-img').value.trim()         || '',
+    disponivel:  document.getElementById('cat-disponivel').value === 'true',
+    categoria:   catModalCatalogo,
+  };
+  if (!dadosCatalogo[catModalCatalogo]) dadosCatalogo[catModalCatalogo] = [];
+  dadosCatalogo[catModalCatalogo].push(novo);
+  try {
+    await db.collection('catalogo').doc('produtos').set(dadosCatalogo);
+    mostrarToast(`✅ "${nome}" adicionado ao catálogo!`);
+    document.getElementById('modal-catalogo').classList.remove('aberto');
+    if (catCatalogoAtiva === catModalCatalogo) renderizarCatalogo();
+  } catch(e) { mostrarToast('❌ Erro ao cadastrar!'); }
+  btn.disabled = false; btn.textContent = '✅ Adicionar ao Catálogo';
+}
+
+// ===== CONFIG PROMOÇÃO =====
+async function carregarConfigPromocao() {
+  try {
+    const doc = await db.collection('config').doc('promocao').get();
+    if (doc.exists) {
+      const data = doc.data();
+      document.getElementById('config-inicio').value = data.inicio || '';
+      document.getElementById('config-fim').value = data.fim || '';
+      mostrarPreviewConfig(data.inicio, data.fim);
+      document.getElementById('status-config').textContent = '✅ Configuração carregada!';
+    } else {
+      document.getElementById('status-config').textContent = '⚠️ Nenhuma configuração salva ainda.';
+    }
+  } catch(e) {
+    document.getElementById('status-config').textContent = '❌ Erro ao carregar.';
+    document.getElementById('status-config').className = 'status-bar erro';
+  }
+}
+
+async function salvarConfigPromocao() {
+  const inicio = document.getElementById('config-inicio').value;
+  const fim = document.getElementById('config-fim').value;
+  if (!inicio || !fim) { mostrarToast('⚠️ Preencha início e fim!'); return; }
+  if (new Date(fim) <= new Date(inicio)) { mostrarToast('⚠️ O fim deve ser depois do início!'); return; }
+  try {
+    await db.collection('config').doc('promocao').set({ inicio, fim });
+    mostrarToast('✅ Configuração salva!');
+    mostrarPreviewConfig(inicio, fim);
+  } catch(e) { mostrarToast('❌ Erro ao salvar!'); }
+}
+
+function mostrarPreviewConfig(inicio, fim) {
+  const el = document.getElementById('config-preview');
+  if (!inicio || !fim) return;
+  const ini = new Date(inicio).toLocaleString('pt-BR');
+  const fi = new Date(fim).toLocaleString('pt-BR');
+  el.style.display = 'block';
+  el.innerHTML = `⏰ <strong>Início:</strong> ${ini}<br>🏁 <strong>Fim:</strong> ${fi}`;
+}
+
+
+function trocarAbaCatalogo(cat) {
+  catCatalogoAtiva = cat;
+  document.querySelectorAll('#secao-catalogo-admin .aba').forEach(a => a.classList.remove('ativo'));
+  document.querySelector(`#secao-catalogo-admin .aba.${cat}`).classList.add('ativo');
+  renderizarCatalogo();
+}
+
+// ===== TOAST =====
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
