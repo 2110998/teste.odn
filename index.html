@@ -842,8 +842,9 @@ function iniciarContador() {
 
       // Se promoção ainda não começou ou já acabou
       if (agora < dataInicio || agora > dataFim) {
-        // Limpa produtos automaticamente se passou do fim
-        if (agora > dataFim) {
+        // Só limpa produtos se a promoção realmente já expirou (fim no passado)
+        // E apenas se o fim foi configurado há mais de 1 hora (evita limpar por engano)
+        if (agora > dataFim && (agora - dataFim) > 3600000) {
           await db.collection('promocoes').doc('produtos').set({ verduras:[], frutas:[], temperos:[] });
         }
         elHoras.textContent = '00';
